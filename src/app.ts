@@ -3,6 +3,7 @@ import cors from 'cors';
 import express, { Application, NextFunction, Request, Response } from 'express';
 import globalErrorHandler from './app/middlwares/globalErrorHandler';
 import notFound from './app/middlwares/notFound';
+import router from './app/routes';
 
 const app: Application = express();
 
@@ -13,6 +14,15 @@ app.use(cors());
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
+
+const test = async(res: Response) => {
+  const a = 10;
+  res.send(a);
+}
+app.get('/', test);
+// Application routes
+app.use('/api/v1', router)
+
 
 // User middlwares
 
