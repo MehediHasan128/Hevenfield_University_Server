@@ -17,7 +17,7 @@ app.get('/', (req, res) => {
 
 const test = async(res: Response) => {
   const a = 10;
-  res.send(a);
+  res
 }
 app.get('/', test);
 // Application routes
