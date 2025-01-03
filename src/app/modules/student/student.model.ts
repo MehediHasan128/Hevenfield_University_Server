@@ -86,6 +86,8 @@ const studentSchema = new Schema<TStudent>({
   waiver: { type: Number, required: [true, 'Waiver percentage is required.'] },
 
   isDeleted: { type: Boolean, default: false },
+},{
+  timestamps: true
 });
 
 
