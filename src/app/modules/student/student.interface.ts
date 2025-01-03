@@ -48,6 +48,10 @@ export type TStudent = {
     // Addmission Info
     addmissionSemester: Types.ObjectId;
     academicDepartment: Types.ObjectId;
+    addmissionFee: number;
+    totalCredits: number;
+    totalCost: number;
+    waiver: number;
 
     isDeleted: boolean;
 }
