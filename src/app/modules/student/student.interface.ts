@@ -25,6 +25,7 @@ export type TStudent = {
     userId: Types.ObjectId;
     imageURL?: string;
     userName: TUserName;
+    email: string;
     gender: 'male' | 'female';
     dateOfBirth: Date;
     contactNumber: string;

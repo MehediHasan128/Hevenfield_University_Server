@@ -37,6 +37,11 @@ const studentSchema = new Schema<TStudent>({
   },
   imageURL: { type: String },
   userName: userNameSchema,
+  email: {
+    type: String,
+    required: [true, 'Email is required'],
+    unique: true
+  },
   gender: {
     type: String,
     enum: ['male', 'female'],

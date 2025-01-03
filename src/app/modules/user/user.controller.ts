@@ -3,11 +3,10 @@ import sendResponce from "../../utils/sendResponce";
 import { UserServices } from "./user.services";
 
 const createStudent = catchAsync(async(req, res) => {
-    
-    const userData = req.body;
-    console.log(userData);
 
-    const data = await UserServices.createStudentIntoDB();
+    const {password, studentData} = req.body;
+
+    const data = await UserServices.createStudentIntoDB(password, studentData);
 
     sendResponce(res, {
         success: true,
