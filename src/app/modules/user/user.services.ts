@@ -3,6 +3,10 @@ import config from "../../config";
 import { TStudent } from "../student/student.interface";
 import { TUser } from "./user.interface";
 import { User } from "./user.model";
+import AppError from "../../errors/AppError";
+import httpStatus from 'http-status';
+import { Student } from "../student/student.model";
+import calculateWaiver from "../../utils/calculateWaiver";
 
 const createStudentIntoDB = async(password: string, payload: TStudent) => {
     
@@ -20,6 +24,18 @@ const createStudentIntoDB = async(password: string, payload: TStudent) => {
 
     // Set user role
     userData.role = 'student';
+
+
+    // Calculate student waiver
+    const waiver = calculateWaiver(payload.sscResult, payload.hscResult);
+    // Set waiver
+    payload.waiver = `${waiver}%`;
+
+    // total discount
+    const discount = payload.totalCost * (waiver/100);
+    // Set total cost
+    payload.totalCost = payload.totalCost - discount;
+
     
     // User transaction rollback functionality
 
@@ -30,8 +46,22 @@ const createStudentIntoDB = async(password: string, payload: TStudent) => {
         // Start a session
         session.startTransaction();
 
+        // Create a user (transaction-1)
         const newUser = await User.create([userData], {session});
-        console.log(newUser);
+        
+        if(!newUser.length){
+            throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create user');
+        }
+
+        payload.id = newUser[0].id;
+        payload.userId = newUser[0]._id;
+
+        // Create a student (transaction-2)
+        const newStudent = await Student.create([payload], {session});
+
+        if(!newStudent){
+            throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create student');
+        }
 
         await session.commitTransaction();
         await session.endSession();

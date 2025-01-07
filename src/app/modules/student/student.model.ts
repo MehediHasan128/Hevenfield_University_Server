@@ -78,9 +78,9 @@ const studentSchema = new Schema<TStudent>({
 
   // Academic Info
   sscRoll: { type: String, required: [true, 'SSC roll is required.'] },
-  sscResult: { type: String, required: [true, 'SSC result is required.'] },
+  sscResult: { type: Number, required: [true, 'SSC result is required.'] },
   hscRoll: { type: String, required: [true, 'HSC roll is required.'] },
-  hscResult: { type: String, required: [true, 'HSC result is required.'] },
+  hscResult: { type: Number, required: [true, 'HSC result is required.'] },
 
   // Admission Info
   addmissionSemester: { type: Schema.Types.ObjectId, required: [true, 'Admission semester is required.'], ref: '' },
@@ -88,7 +88,7 @@ const studentSchema = new Schema<TStudent>({
   addmissionFee: { type: Number, required: [true, 'Admission fee is required.'] },
   totalCredits: { type: Number, required: [true, 'Total credits are required.'] },
   totalCost: { type: Number, required: [true, 'Total cost is required.'] },
-  waiver: { type: Number, required: [true, 'Waiver percentage is required.'] },
+  waiver: { type: String, required: [true, 'Waiver percentage is required.'] },
 
   isDeleted: { type: Boolean, default: false },
 },{

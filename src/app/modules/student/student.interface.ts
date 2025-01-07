@@ -42,9 +42,9 @@ export type TStudent = {
 
     // Academic Info
     sscRoll: string;
-    sscResult: string;
+    sscResult: number;
     hscRoll: string;
-    hscResult: string;
+    hscResult: number;
 
     // Addmission Info
     addmissionSemester: Types.ObjectId;
@@ -52,7 +52,7 @@ export type TStudent = {
     addmissionFee: number;
     totalCredits: number;
     totalCost: number;
-    waiver: number;
+    waiver: string;
 
     isDeleted: boolean;
 }

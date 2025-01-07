@@ -61,13 +61,13 @@ const createStudentValidationSchema = z.object({
       sscRoll: z.string({
         required_error: 'SSC roll is required.',
       }),
-      sscResult: z.string({
+      sscResult: z.number({
         required_error: 'SSC result is required.',
       }),
       hscRoll: z.string({
         required_error: 'HSC roll is required.',
       }),
-      hscResult: z.string({
+      hscResult: z.number({
         required_error: 'HSC result is required.',
       }),
       addmissionSemester: z.string({
@@ -84,9 +84,6 @@ const createStudentValidationSchema = z.object({
       }),
       totalCost: z.number({
         required_error: 'Total cost is required.',
-      }),
-      waiver: z.number({
-        required_error: 'Waiver percentage is required.',
       }),
       isDeleted: z.boolean().optional(),
     }),
