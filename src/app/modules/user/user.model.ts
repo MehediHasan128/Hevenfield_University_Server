@@ -44,6 +44,7 @@ const userSchema = new Schema<TUser>({
       values: ['active', 'blocked'],
       message: 'Status must be either active or blocked.',
     },
+    default: 'active'
   },
   isDeleted: {
     type: Boolean,

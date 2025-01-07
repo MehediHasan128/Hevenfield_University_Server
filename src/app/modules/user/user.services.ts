@@ -5,6 +5,8 @@ import { TUser } from "./user.interface";
 import { User } from "./user.model";
 
 const createStudentIntoDB = async(password: string, payload: TStudent) => {
+
+    console.log(payload, password);
     
     // Create a user object
     const userData: Partial<TUser> = {};
@@ -32,8 +34,13 @@ const createStudentIntoDB = async(password: string, payload: TStudent) => {
 
         const newUser = await User.create([userData], {session});
         console.log(newUser);
+
+        await session.commitTransaction();
+        await session.endSession();
     }catch(err){
         console.log(err);
+        await session.abortTransaction();
+        await session.endSession();
     }
 };
 
