@@ -6,6 +6,9 @@ import { ZodError } from "zod";
 import handleZodError from "../errors/handleZodError";
 import handleValidationError from "../errors/handleValidationError";
 import handleCastError from "../errors/handleCastError";
+import handleDuplicateError from "../errors/handleDuplicateError";
+import AppError from "../errors/AppError";
+import config from "../config";
 
 const globalErrorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
 
@@ -31,13 +34,32 @@ const globalErrorHandler = (err: any, req: Request, res: Response, next: NextFun
         statusCode = simplifiedError.statusCode;
         message = simplifiedError.message;
         errorSources = simplifiedError.errorSource;
+    }else if(err?.code === 11000){
+        const simplifiedError = handleDuplicateError(err);
+        statusCode = simplifiedError.statusCode;
+        message = simplifiedError.message;
+        errorSources = simplifiedError.errorSource;
+    }else if(err instanceof AppError){
+        statusCode = err?.statusCode;
+        message = err?.message;
+        errorSources = [{
+            path: '',
+            message: err?.message
+        }]
+    }else if(err instanceof Error){
+        message = err.message;
+        errorSources = [{
+            path: '',
+            message: err.message
+        }]
+
     }
 
     return res.status(statusCode).json({
         success: false,
         message,
         errorSources,
-        // error: err
+        stack: config.node_env === 'development'? err?.stack : null
     })
 }
 
