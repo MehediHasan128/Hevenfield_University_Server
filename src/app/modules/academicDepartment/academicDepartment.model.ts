@@ -7,7 +7,7 @@ const createAcademicDepartmentSchema = new Schema<TAcademicDepartment>({
 
     academicFaculty: {
         type: Schema.Types.ObjectId,
-        ref: 'AcademicFaculty', // Replace with your actual faculty model name
+        ref: 'AcademicFaculties', // Replace with your actual faculty model name
         required: [true, 'Academic faculty is required.'],
       },
       departmentName: {
