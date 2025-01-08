@@ -33,7 +33,7 @@ const createAcademicDepartmentSchema = new Schema<TAcademicDepartment>({
 });
 
 createAcademicDepartmentSchema.pre('save', async function(next){
-    const isDepartmentExists = await AcademicDepartment.findOne({academicFaculty: this.academicFaculty});
+    const isDepartmentExists = await AcademicDepartment.findOne({departmentName: this.departmentName});
 
     if(isDepartmentExists){
         throw new AppError(httpStatus.CONFLICT, 'Academic department is already exists');

@@ -1,11 +1,12 @@
-import { startSession } from "mongoose";
 import config from "../../config";
-import { TStudent } from "../student/student.interface";
-import { TUser } from "./user.interface";
 import { User } from "./user.model";
-import AppError from "../../errors/AppError";
 import httpStatus from 'http-status';
+import { TUser } from "./user.interface";
+import AppError from "../../errors/AppError";
+import { startSession, Types } from "mongoose";
+import { generateStudentId } from "./user.utils";
 import { Student } from "../student/student.model";
+import { TStudent } from "../student/student.interface";
 import calculateWaiver from "../../utils/calculateWaiver";
 
 const createStudentIntoDB = async(password: string, payload: TStudent) => {
@@ -13,8 +14,9 @@ const createStudentIntoDB = async(password: string, payload: TStudent) => {
     // Create a user object
     const userData: Partial<TUser> = {};
 
-    // Set student id from payload
-    userData.id = payload.id;
+    // Set student id
+    const studenId = await generateStudentId(payload.addmissionSemester as Types.ObjectId, payload.academicDepartment as Types.ObjectId);
+    userData.id = studenId;
 
     // Set user email from payload
     userData.email = payload.email;
@@ -65,6 +67,8 @@ const createStudentIntoDB = async(password: string, payload: TStudent) => {
 
         await session.commitTransaction();
         await session.endSession();
+
+        return newStudent;
     }catch(err){
         console.log(err);
         await session.abortTransaction();
