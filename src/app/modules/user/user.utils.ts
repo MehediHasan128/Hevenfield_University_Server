@@ -34,6 +34,3 @@ export const generateStudentId = async(semesterId: Types.ObjectId, departmentId:
 
     return incrementId
 }
-
-
-// 2501101001

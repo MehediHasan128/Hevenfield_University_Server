@@ -8,6 +8,8 @@ import { generateStudentId } from "./user.utils";
 import { Student } from "../student/student.model";
 import { TStudent } from "../student/student.interface";
 import calculateWaiver from "../../utils/calculateWaiver";
+import { AcademicDepartment } from "../academicDepartment/academicDepartment.model";
+import { getDepartmentCostInformation } from "../../utils/getDepartmentCostInformation";
 
 const createStudentIntoDB = async(password: string, payload: TStudent) => {
     
@@ -27,53 +29,60 @@ const createStudentIntoDB = async(password: string, payload: TStudent) => {
     // Set user role
     userData.role = 'student';
 
-
     // Calculate student waiver
     const waiver = calculateWaiver(payload.sscResult, payload.hscResult);
     // Set waiver
     payload.waiver = `${waiver}%`;
 
-    // total discount
-    const discount = payload.totalCost * (waiver/100);
-    // Set total cost
-    payload.totalCost = payload.totalCost - discount;
-
     
+    // get department name
+    const academicDepartment = await AcademicDepartment.findById(payload.academicDepartment, {_id: 0, departmentName: 1});
+
+    // Get department cost information
+    const departmentCostInformation = getDepartmentCostInformation(academicDepartment?.departmentName as string);
+    const { credits, creditCost, addmissionCost } = departmentCostInformation;
+
+    // Set addmission fees
+    payload.addmissionFee = addmissionCost;
+
+    // Set total creadits
+    payload.totalCredits = credits;
+
     // User transaction rollback functionality
 
     // Start a session
-    const session = await startSession();
+    // const session = await startSession();
 
-    try{
-        // Start a session
-        session.startTransaction();
+    // try{
+    //     // Start a session
+    //     session.startTransaction();
 
-        // Create a user (transaction-1)
-        const newUser = await User.create([userData], {session});
+    //     // Create a user (transaction-1)
+    //     const newUser = await User.create([userData], {session});
         
-        if(!newUser.length){
-            throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create user');
-        }
+    //     if(!newUser.length){
+    //         throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create user');
+    //     }
 
-        payload.id = newUser[0].id;
-        payload.userId = newUser[0]._id;
+    //     payload.id = newUser[0].id;
+    //     payload.userId = newUser[0]._id;
 
-        // Create a student (transaction-2)
-        const newStudent = await Student.create([payload], {session});
+    //     // Create a student (transaction-2)
+    //     const newStudent = await Student.create([payload], {session});
 
-        if(!newStudent){
-            throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create student');
-        }
+    //     if(!newStudent){
+    //         throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create student');
+    //     }
 
-        await session.commitTransaction();
-        await session.endSession();
+    //     await session.commitTransaction();
+    //     await session.endSession();
 
-        return newStudent;
-    }catch(err){
-        console.log(err);
-        await session.abortTransaction();
-        await session.endSession();
-    }
+    //     return newStudent;
+    // }catch(err){
+    //     console.log(err);
+    //     await session.abortTransaction();
+    //     await session.endSession();
+    // }
 };
 
 export const UserServices = {
