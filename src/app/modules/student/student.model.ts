@@ -87,6 +87,8 @@ const studentSchema = new Schema<TStudent>({
   academicDepartment: { type: Schema.Types.ObjectId, required: [true, 'Academic department is required.'], ref: '' },
   addmissionFee: { type: Number, required: [true, 'Admission fee is required.'] },
   totalCredits: { type: Number, required: [true, 'Total credits are required.'] },
+  creditCost: { type: Number, required: true},
+  creditCostAfterWaiver: { type: Number, required: true},
   totalCost: { type: Number, required: [true, 'Total cost is required.'] },
   waiver: { type: String, required: [true, 'Waiver percentage is required.'] },
 
