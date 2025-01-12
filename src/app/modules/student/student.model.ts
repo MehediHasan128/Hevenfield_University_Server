@@ -83,6 +83,7 @@ const studentSchema = new Schema<TStudent>({
   hscResult: { type: Number, required: [true, 'HSC result is required.'] },
 
   // Admission Info
+  batch: { type: String },
   addmissionSemester: { type: Schema.Types.ObjectId, required: [true, 'Admission semester is required.'], ref: '' },
   academicDepartment: { type: Schema.Types.ObjectId, required: [true, 'Academic department is required.'], ref: '' },
   addmissionFee: { type: Number, required: [true, 'Admission fee is required.'] },

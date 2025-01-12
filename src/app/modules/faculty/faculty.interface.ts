@@ -9,22 +9,22 @@ export type TEducationalBackground = {
 }[];
 
 export type TProfessionalExperience = {
-  role: string;
-  institution: string;
-  duration: string;
-  responsibilities: string;
+  role?: string;
+  institution?: string;
+  duration?: string;
+  responsibilities?: string;
 }[];
 
 export type TRecommendationLetters = {
-  name: string;
-  designation: string;
-  institution: string;
-  contactEmail: string;
+  name?: string;
+  designation?: string;
+  institution?: string;
+  contactEmail?: string;
 }[];
 
 export type TSampleWorkPortfolio = {
-  type: string;
-  url: string;
+  type?: string;
+  url?: string;
 }[];
 
 export type TReference = {
@@ -57,5 +57,6 @@ export type TFaculty = {
   skillsAndCertifications?: string[] | undefined;
   sampleWorkPortfolio?: TSampleWorkPortfolio | undefined;
   awardsAndAchievements?: string[] | undefined;
+  recommendationLetters?: TRecommendationLetters | undefined;
   reference: TReference;
 };

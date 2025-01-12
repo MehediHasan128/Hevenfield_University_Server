@@ -47,6 +47,7 @@ export type TStudent = {
     hscResult: number;
 
     // Addmission Info
+    batch: string;
     addmissionSemester: Types.ObjectId;
     academicDepartment: Types.ObjectId;
     addmissionFee: number;

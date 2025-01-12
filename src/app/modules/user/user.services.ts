@@ -4,12 +4,13 @@ import httpStatus from 'http-status';
 import { TUser } from "./user.interface";
 import AppError from "../../errors/AppError";
 import { startSession, Types } from "mongoose";
-import { generateStudentId } from "./user.utils";
+import { generateBatch, generateStudentId } from "./user.utils";
 import { Student } from "../student/student.model";
 import { TStudent } from "../student/student.interface";
 import calculateWaiver from "../../utils/calculateWaiver";
 import { AcademicDepartment } from "../academicDepartment/academicDepartment.model";
 import { getDepartmentCostInformation } from "../../utils/getDepartmentCostInformation";
+import { TFaculty } from "../faculty/faculty.interface";
 
 const createStudentIntoDB = async(password: string, payload: TStudent) => {
     
@@ -58,7 +59,11 @@ const createStudentIntoDB = async(password: string, payload: TStudent) => {
     payload.totalCost = totalAddmissionFees + totalTuitionFees;
     
 
+    // Generate Batch
+    const studentBatch = await generateBatch(payload.addmissionSemester as Types.ObjectId, payload.academicDepartment as Types.ObjectId);
+    payload.batch = studentBatch;
 
+    // console.log(payload.batch);
 
 
     // User transaction rollback functionality
@@ -91,6 +96,11 @@ const createStudentIntoDB = async(password: string, payload: TStudent) => {
     }
 };
 
+const createFacultyIntoDB = async(password: string, payload: TFaculty) => {
+    console.log(payload, password);
+}
+
 export const UserServices = {
-    createStudentIntoDB
+    createStudentIntoDB,
+    createFacultyIntoDB
 }
