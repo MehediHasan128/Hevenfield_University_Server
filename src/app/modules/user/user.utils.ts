@@ -2,6 +2,7 @@ import { Types } from 'mongoose';
 import { AcademicSemester } from '../academicSemester/academicSemester.model';
 import { AcademicDepartment } from '../academicDepartment/academicDepartment.model';
 import { User } from './user.model';
+import { Student } from '../student/student.model';
 
 const findLastUser = async (userRole: string) => {
   const lastUser = await User.findOne({ role: userRole }, { _id: 0, id: 1 })
@@ -10,8 +11,6 @@ const findLastUser = async (userRole: string) => {
 
   return lastUser?.id ? lastUser.id : undefined;
 };
-
-
 
 export const generateStudentId = async (
   semesterId: Types.ObjectId,
@@ -63,36 +62,41 @@ export const generateBatch = async (
   semesterId: Types.ObjectId,
   departmentId: Types.ObjectId,
 ) => {
-  const academicSemester = await AcademicSemester.findById(semesterId, {
-    _id: 0,
-    year: 1,
-    semesterCode: 1,
-  });
-  const academicDepartment = await AcademicDepartment.findById(departmentId, {
-    _id: 0,
-    departmentCode: 1,
-  });
-  const currentStudentAddmissionYear = academicSemester?.year
-    ?.toString()
-    .slice(-2);
-  const currentStudentAddmissionSemesterCode = academicSemester?.semesterCode;
-  const currentStudentDepartmentCode = academicDepartment?.departmentCode
-    ?.toString()
-    .slice(-3);
 
-  const lastStudentId = await findLastUser('student');
-  const lastStudentAddmissionYear = lastStudentId?.substring(0, 2);
-  const lastStudentAddmissionSemesterCode = lastStudentId?.substring(2, 4);
-  const lastStudentDepartmentCode = lastStudentId?.substring(4, 7);
+  // Initial first student batch
+  let studentBatch = "Batch-01";
 
-  let currentStudentBatch = (1).toString();
+  // Find academic semester and academic department
+  const academicSemester = await AcademicSemester.findById(semesterId, {_id: 0, year: 1, semesterCode: 1});
+  const academicDepartment = await AcademicDepartment.findById(departmentId, {_id: 0, departmentCode: 1});
 
-  if(lastStudentId && lastStudentAddmissionYear === currentStudentAddmissionYear && (lastStudentDepartmentCode === currentStudentDepartmentCode || lastStudentDepartmentCode !== currentStudentDepartmentCode) && lastStudentAddmissionSemesterCode === currentStudentAddmissionSemesterCode){
-    currentStudentBatch = "Batch-1";
-    return currentStudentBatch;
+  // find out the addmission year, semester code, department code
+  const addmissionYear = academicSemester?.year.substring(2);
+  const semesterCode = academicSemester?.semesterCode;
+  const departmentCode = academicDepartment?.departmentCode.substring(2);
+
+  // Check the student database if the coming department student is exist or not
+  const isStudentExistOnADepartment = await Student.findOne({academicDepartment: departmentId}, {_id: 0, batch: 1, id: 1}).sort({ createdAt: -1 });
+  
+  // find last student addmission year, semester code, department code, or batch
+  const lastStudentAddmissionYear = isStudentExistOnADepartment?.id.substring(0, 2);
+  const lastStudentSemesterCode = isStudentExistOnADepartment?.id.substring(2, 4);
+  const lastStudentDepartmentCode = isStudentExistOnADepartment?.id.substring(4, 7);
+  const lastStudentBatch = isStudentExistOnADepartment?.batch;
+  
+  // Set student batch is isStudentExistOnADepartment is null
+  if(!isStudentExistOnADepartment){
+    studentBatch = "Batch-01";
+  };
+
+
+  // check the last student addmission year, semester code or department is equal to semester year, semester code or department code
+  if(isStudentExistOnADepartment && lastStudentAddmissionYear === addmissionYear && lastStudentSemesterCode === semesterCode && lastStudentDepartmentCode === departmentCode){
+    studentBatch = lastStudentBatch!
   }else{
-    let incrementBatch = (Number(currentStudentBatch) + 1).toString();
-    incrementBatch = `Batch-${incrementBatch}`;
-    return incrementBatch;
+    studentBatch = "Batch-02"
   }
+
+
+  return studentBatch;
 };

@@ -32,6 +32,8 @@ const createStudentIntoDB = async(password: string, payload: TStudent) => {
 
 
 
+
+
     // Calculate costing
     
     // Calculate student waiver
@@ -59,41 +61,49 @@ const createStudentIntoDB = async(password: string, payload: TStudent) => {
     payload.totalCost = totalAddmissionFees + totalTuitionFees;
     
 
+
+
+
+
     // Generate Batch
     const studentBatch = await generateBatch(payload.addmissionSemester as Types.ObjectId, payload.academicDepartment as Types.ObjectId);
     payload.batch = studentBatch;
+    console.log(studentBatch);
+    payload.section = 'A';
 
-    // console.log(payload.batch);
+
+
+
 
 
     // User transaction rollback functionality
 
     // Start a session
-    const session = await startSession();
+    // const session = await startSession();
 
-    try{
-        // Start a session
-        session.startTransaction();
-        // Create a user (transaction-1)
-        const newUser = await User.create([userData], {session});
-        if(!newUser.length){
-            throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create user');
-        }
-        payload.id = newUser[0].id;
-        payload.userId = newUser[0]._id;
-        // Create a student (transaction-2)
-        const newStudent = await Student.create([payload], {session});
-        if(!newStudent){
-            throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create student');
-        }
-        await session.commitTransaction();
-        await session.endSession();
-        return newStudent;
-    }catch(err){
-        console.log(err);
-        await session.abortTransaction();
-        await session.endSession();
-    }
+    // try{
+    //     // Start a session
+    //     session.startTransaction();
+    //     // Create a user (transaction-1)
+    //     const newUser = await User.create([userData], {session});
+    //     if(!newUser.length){
+    //         throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create user');
+    //     }
+    //     payload.id = newUser[0].id;
+    //     payload.userId = newUser[0]._id;
+    //     // Create a student (transaction-2)
+    //     const newStudent = await Student.create([payload], {session});
+    //     if(!newStudent){
+    //         throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create student');
+    //     }
+    //     await session.commitTransaction();
+    //     await session.endSession();
+    //     return newStudent;
+    // }catch(err){
+    //     console.log(err);
+    //     await session.abortTransaction();
+    //     await session.endSession();
+    // }
 };
 
 const createFacultyIntoDB = async(password: string, payload: TFaculty) => {

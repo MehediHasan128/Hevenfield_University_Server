@@ -48,6 +48,7 @@ export type TStudent = {
 
     // Addmission Info
     batch: string;
+    section: string;
     addmissionSemester: Types.ObjectId;
     academicDepartment: Types.ObjectId;
     addmissionFee: number;
