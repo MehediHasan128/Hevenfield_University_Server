@@ -10,4 +10,5 @@ export default {
   student_default_pass: process.env.STUDENT_DEFAULT_PASS,
   total_semester: process.env.TOTAL_SEMESTER,
   student_capacity: process.env.STUDENT_CAPACITY,
+  bcrypt_salt_round: process.env.BCRYPT_SALT_ROUND,
 };
