@@ -1,10 +1,11 @@
 import AppError from "../../errors/AppError";
 import { User } from "../user/user.model";
-import { TUserLogin } from "./auth.interface";
+import { TUserLogin, TUserToken } from "./auth.interface";
 import httpStatus from 'http-status';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import config from "../../config";
+import { createToken } from "./auth.utils";
 
 const loginUser = async(payload: TUserLogin) => {
 
@@ -33,17 +34,19 @@ const loginUser = async(payload: TUserLogin) => {
 
 
     // If the password is correct then create a user token;
-
-    const jwtPayload = {
+    const jwtPayload: TUserToken = {
         userEmail: isUserExist?.email,
         userId: isUserExist?.id,
-        role: isUserExist?.role
+        userRole: isUserExist?.role
     };
     // Create jwt token
-    const token = jwt.sign(jwtPayload, config.jwt_access_secret_token as string, {expiresIn: '1d'});
+    const accessToken = createToken(jwtPayload, config.jwt_access_secret_token as string, config.jwt_access_expires_in as string);
 
-    console.log(token);
-
+    
+    return {
+        accessToken,
+        needsPasswordChange: isUserExist?.needPasswordChange
+    }
 }
 
 export const AuthServices = {
