@@ -1,12 +1,6 @@
 import { model, Schema } from 'mongoose';
-import { TUserName } from '../user/user.constant';
+import { userNameSchema } from '../user/user.constant';
 import { TGuardian, TLocalGuardian, TStudent } from './student.interface';
-
-const userNameSchema = new Schema<TUserName>({
-  firstName: { type: String, required: [true, 'First name is required.'] },
-  middleName: { type: String },
-  lastName: { type: String, required: [true, 'Last name is required.'] },
-});
 
 const guardianSchema = new Schema<TGuardian>({
   // Personal information

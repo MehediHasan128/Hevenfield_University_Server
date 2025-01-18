@@ -23,6 +23,8 @@ const createStudentIntoDB = async(password: string, payload: TStudent) => {
     userData.id = studenId;
     // Set user email from payload
     userData.email = payload.email;
+    // set user name
+    userData.userName = payload?.userName;
     // id password is not given use default passwprd
     userData.password = password || (config.student_default_pass as string);
     // Set user role

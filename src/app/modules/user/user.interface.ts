@@ -1,8 +1,9 @@
-import { userRole } from "./user.constant";
+import { TUserName, userRole } from "./user.constant";
 
 export type TUser = {
     id: string;
     email: string;
+    userName: TUserName;
     password: string;
     needPasswordChange: boolean;
     passwordChangeAt?: Date;

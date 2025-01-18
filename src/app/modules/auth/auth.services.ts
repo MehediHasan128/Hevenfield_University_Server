@@ -99,7 +99,10 @@ const forgetUserPassword = async(userEmail: string) =>{
 
     const passwordResetLink = `${config.reset_password_ui_link}?email=${isUserExist?.email}&token=${resetPasswordToken}`;
 
-    await sendEmail(isUserExist?.email, "Mehedi Hasan", passwordResetLink);
+    const {userName: name} = isUserExist;
+    const userName = name?.lastName;
+
+    await sendEmail(isUserExist?.email, userName, passwordResetLink);
 
     return {
         passwordResetLink

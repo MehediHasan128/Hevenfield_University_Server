@@ -2,6 +2,7 @@ import { model, Schema } from 'mongoose';
 import { TUser } from './user.interface';
 import bcrypt from 'bcrypt';
 import config from '../../config';
+import { userNameSchema } from './user.constant';
 
 const userSchema = new Schema<TUser>({
   id: {
@@ -18,6 +19,10 @@ const userSchema = new Schema<TUser>({
       /^([a-zA-Z0-9_\-.]+)@([a-zA-Z0-9_\-.]+)\.([a-zA-Z]{2,5})$/,
       'Please enter a valid email address.',
     ],
+  },
+  userName: {
+    type: userNameSchema,
+    required: true
   },
   password: {
     type: String,
