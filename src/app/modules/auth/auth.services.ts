@@ -1,11 +1,11 @@
 import AppError from "../../errors/AppError";
 import { User } from "../user/user.model";
-import { TUserLogin, TUserToken } from "./auth.interface";
+import { TChangePassword, TUserLogin, TUserToken } from "./auth.interface";
 import httpStatus from 'http-status';
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 import config from "../../config";
 import { createToken } from "./auth.utils";
+import { JwtPayload } from "jsonwebtoken";
 
 const loginUser = async(payload: TUserLogin) => {
 
@@ -47,8 +47,13 @@ const loginUser = async(payload: TUserLogin) => {
         accessToken,
         needsPasswordChange: isUserExist?.needPasswordChange
     }
+};
+
+const changeUserPassword = async(userData: JwtPayload, payload: TChangePassword) => {
+    console.log(payload, userData);
 }
 
 export const AuthServices = {
-    loginUser
+    loginUser,
+    changeUserPassword
 }

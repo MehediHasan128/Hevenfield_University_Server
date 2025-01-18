@@ -5,8 +5,16 @@ const userLoginValidationSchema = z.object({
         email: z.string().optional(),
         password: z.string()
     })
+});
+
+const changeUserPassword = z.object({
+    body: z.object({
+        oldPassword: z.string(),
+        newPassword: z.string(),
+    })
 })
 
 export const AuthValidation = {
-    userLoginValidationSchema
+    userLoginValidationSchema,
+    changeUserPassword
 }

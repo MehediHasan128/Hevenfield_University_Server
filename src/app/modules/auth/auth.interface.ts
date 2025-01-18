@@ -3,8 +3,13 @@ export type TUserLogin = {
     password: string;
 };
 
+export type TChangePassword = {
+    oldPassword: string;
+    newPassword: string;
+}
+
 export type TUserToken = {
     userEmail: string;
     userId: string;
     userRole: string;
-}
+};
