@@ -1,7 +1,9 @@
 export type TUserLogin = {
-    email?: string;
+    email: string;
     password: string;
 };
+
+export type TResetData = TUserLogin
 
 export type TChangePassword = {
     oldPassword: string;
@@ -13,3 +15,4 @@ export type TUserToken = {
     userId: string;
     userRole: string;
 };
+

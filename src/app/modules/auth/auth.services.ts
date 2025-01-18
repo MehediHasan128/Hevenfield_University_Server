@@ -1,12 +1,13 @@
 import AppError from "../../errors/AppError";
 import { User } from "../user/user.model";
-import { TChangePassword, TUserLogin, TUserToken } from "./auth.interface";
+import { TChangePassword, TResetData, TUserLogin, TUserToken } from "./auth.interface";
 import httpStatus from 'http-status';
 import bcrypt from 'bcrypt';
 import config from "../../config";
 import { createToken } from "./auth.utils";
 import { JwtPayload } from "jsonwebtoken";
 import { sendEmail } from "../../utils/sendEmail";
+import jwt from 'jsonwebtoken';
 
 const loginUser = async(payload: TUserLogin) => {
 
@@ -95,10 +96,13 @@ const forgetUserPassword = async(userEmail: string) =>{
         userRole: isUserExist?.role
     }
 
-    const resetPasswordToken = createToken(jwtPayload, config.jwt_access_secret_token as string, '10m');
+    // Create reset token for 10 minutes
+    const resetPasswordToken = createToken(jwtPayload, config.jwt_access_secret_token as string, '10d');
 
+    // Generate reset link
     const passwordResetLink = `${config.reset_password_ui_link}?email=${isUserExist?.email}&token=${resetPasswordToken}`;
 
+    // Get user name
     const {userName: name} = isUserExist;
     const userName = name?.lastName;
 
@@ -107,10 +111,44 @@ const forgetUserPassword = async(userEmail: string) =>{
     return {
         passwordResetLink
     }
+};
+
+const resetUserPassword = async(resetData: TResetData, token: string) => {
+    
+    // Check the user is exists in database
+    const isUserExist = await User.findOne({email: resetData?.email});
+    if(!isUserExist){
+        throw new AppError(httpStatus.NOT_FOUND, 'This user not found!')
+    }
+
+    // Check the user is already delete or not
+    const isUserDelete = isUserExist?.isDeleted;
+    if(isUserDelete === true){
+        throw new AppError(httpStatus.FORBIDDEN, 'This user is already deleted!')
+    }
+
+    // Check the user is block or active
+    const userStatus = isUserExist?.status;
+    if(userStatus === 'blocked'){
+        throw new AppError(httpStatus.FORBIDDEN, 'This user is blocked!')
+    }
+
+    // Now verify the user token
+    const decoded = jwt.verify(token, config.jwt_access_secret_token as string) as JwtPayload;
+    if(decoded.userEmail !== resetData?.email){
+        throw new AppError(httpStatus.FORBIDDEN, 'You are forbidden')
+    }
+
+    // Now bcrypt the new password
+    const resetPassword = await bcrypt.hash(resetData?.password, Number(config.bcrypt_salt_round));
+
+    await User.findOneAndUpdate({email: resetData?.email}, {password: resetPassword}, {new: true});
+
 }
 
 export const AuthServices = {
     loginUser,
     changeUserPassword,
-    forgetUserPassword
+    forgetUserPassword,
+    resetUserPassword
 }

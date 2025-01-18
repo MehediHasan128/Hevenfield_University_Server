@@ -18,10 +18,18 @@ const forgetPasswordValidationSchema = z.object({
     body: z.object({
         email: z.string()
     })
-})
+});
+
+const resetPasswordValidationSchema = z.object({
+    body: z.object({
+        email: z.string(),
+        password: z.string()
+    })
+});
 
 export const AuthValidation = {
     userLoginValidationSchema,
     changeUserPassword,
-    forgetPasswordValidationSchema
+    forgetPasswordValidationSchema,
+    resetPasswordValidationSchema
 }

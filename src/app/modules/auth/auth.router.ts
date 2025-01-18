@@ -14,6 +14,6 @@ router.post('/change-password', Auth(userRole.student), valiDationRequest(AuthVa
 // Forget user password
 router.post('/forget-password', valiDationRequest(AuthValidation.forgetPasswordValidationSchema), AuthController.forgetPassword);
 // Reset user password
-router.post('/reset-password', valiDationRequest(AuthValidation.forgetPasswordValidationSchema), AuthController.forgetPassword);
+router.post('/reset-password', valiDationRequest(AuthValidation.resetPasswordValidationSchema), AuthController.resetPassword);
 
 export const AuthRoutes = router;
