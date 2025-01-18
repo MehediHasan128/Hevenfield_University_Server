@@ -67,9 +67,44 @@ const changeUserPassword = async(userData: JwtPayload, payload: TChangePassword)
     const newPassword = await bcrypt.hash(payload?.newPassword, Number(config.bcrypt_salt_round));
 
     await User.findOneAndUpdate({email: userData?.userEmail, role: userData?.userRole}, {password: newPassword, needPasswordChange: false, passwordChangeAt: new Date()}, {new: true}).select('-password');
+};
+
+const forgetUserPassword = async(userEmail: string) =>{
+    // Check the user is exist
+    const isUserExist = await User.findOne({email: userEmail}).select('-password');
+    if(!isUserExist){
+        throw new AppError(httpStatus.NOT_FOUND, 'User not found!');
+    };
+
+    // Check the user is delete or not
+    const isUserDeleted = isUserExist?.isDeleted;
+    if(isUserDeleted === true){
+        throw new AppError(httpStatus.FORBIDDEN, 'This user is already deleted!')
+    };
+
+    // Check the user is block or active
+    const userStatus = isUserExist?.status;
+    if(userStatus === 'blocked'){
+        throw new AppError(httpStatus.FORBIDDEN, 'This user is blocked!')
+    }
+
+    const jwtPayload = {
+        userEmail: isUserExist?.email,
+        userId: isUserExist?.id,
+        userRole: isUserExist?.role
+    }
+
+    const resetPasswordToken = createToken(jwtPayload, config.jwt_access_secret_token as string, '10m');
+
+    const passwordResetLink = `${config.reset_password_ui_link}?email=${isUserExist?.email}&token=${resetPasswordToken}`;
+
+    return {
+        passwordResetLink
+    }
 }
 
 export const AuthServices = {
     loginUser,
-    changeUserPassword
+    changeUserPassword,
+    forgetUserPassword
 }
