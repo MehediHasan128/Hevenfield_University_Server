@@ -6,6 +6,7 @@ import bcrypt from 'bcrypt';
 import config from "../../config";
 import { createToken } from "./auth.utils";
 import { JwtPayload } from "jsonwebtoken";
+import { sendEmail } from "../../utils/sendEmail";
 
 const loginUser = async(payload: TUserLogin) => {
 
@@ -97,6 +98,8 @@ const forgetUserPassword = async(userEmail: string) =>{
     const resetPasswordToken = createToken(jwtPayload, config.jwt_access_secret_token as string, '10m');
 
     const passwordResetLink = `${config.reset_password_ui_link}?email=${isUserExist?.email}&token=${resetPasswordToken}`;
+
+    await sendEmail(isUserExist?.email, "Mehedi Hasan", passwordResetLink);
 
     return {
         passwordResetLink
