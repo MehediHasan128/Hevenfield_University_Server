@@ -1,13 +1,13 @@
-import AppError from "../../errors/AppError";
-import { User } from "../user/user.model";
-import { TChangePassword, TResetData, TUserLogin, TUserToken } from "./auth.interface";
-import httpStatus from 'http-status';
 import bcrypt from 'bcrypt';
-import config from "../../config";
-import { createToken } from "./auth.utils";
-import { JwtPayload } from "jsonwebtoken";
-import { sendEmail } from "../../utils/sendEmail";
 import jwt from 'jsonwebtoken';
+import config from "../../config";
+import httpStatus from 'http-status';
+import { User } from "../user/user.model";
+import { JwtPayload } from "jsonwebtoken";
+import { createToken } from "./auth.utils";
+import AppError from "../../errors/AppError";
+import { sendEmail } from "../../utils/sendEmail";
+import { TChangePassword, TResetData, TUserLogin, TUserToken } from "./auth.interface";
 
 const loginUser = async(payload: TUserLogin) => {
 

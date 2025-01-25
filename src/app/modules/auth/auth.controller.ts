@@ -1,7 +1,7 @@
 import config from "../../config";
+import { AuthServices } from "./auth.services";
 import catchAsync from "../../utils/catchAsync";
 import sendResponce from "../../utils/sendResponce";
-import { AuthServices } from "./auth.services";
 
 const userLogin = catchAsync(async(req, res) => {
 
