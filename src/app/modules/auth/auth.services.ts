@@ -148,11 +148,52 @@ const resetUserPassword = async(resetData: TResetData, token: string) => {
 
     await User.findOneAndUpdate({email: resetData?.email}, {password: resetPassword}, {new: true});
 
+};
+
+const refreshToken = async(token: string) => {
+    const decoded = jwt.verify(
+        token,
+        config.jwt_refresh_secret_token as string
+    ) as JwtPayload;
+    
+    const {userEmail, userId, userRole} = decoded;
+
+    const jwtPayload = {
+        userEmail, 
+        userId,
+        userRole
+    };
+
+    // Check the user is exists on database
+    const isUserExist = await User.findOne({email: userEmail}).select('-password');
+    if(!isUserExist){
+        throw new AppError(httpStatus.NOT_FOUND, 'This user not found!')
+    };
+
+    // Check the user is already deleted
+    const isUserDelete = isUserExist.isDeleted;
+    if(isUserDelete === true){
+        throw new AppError(httpStatus.FORBIDDEN, 'This user is already deleted!')
+    };
+
+    // Check the user status
+    const userStatus = isUserExist.status;
+    if(userStatus === 'blocked'){
+        throw new AppError(httpStatus.FORBIDDEN, 'This user is blocked!')
+    };
+
+    // Now create the token
+    const accessToken = createToken(jwtPayload, config.jwt_access_secret_token as string, config.jwt_access_expires_in as string);
+
+    return {
+        accessToken
+    }
 }
 
 export const AuthServices = {
     loginUser,
     changeUserPassword,
     forgetUserPassword,
-    resetUserPassword
+    resetUserPassword,
+    refreshToken,
 }
