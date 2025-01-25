@@ -14,7 +14,22 @@ const getAllStudent = catchAsync(async(req, res) => {
     });
 });
 
+const getSingleStudent = catchAsync(async(req, res) => {
+
+    const {studentId} = req.params;
+
+    const data = await StudentServices.getSingleStudentFromDB(studentId);    
+
+    sendResponce(res, {
+        success: true,
+        statusCode: 200,
+        message: 'Get student successfully',
+        data: data
+    });
+});
+
 
 export const StudentController = {
-    getAllStudent
+    getAllStudent,
+    getSingleStudent
 }
