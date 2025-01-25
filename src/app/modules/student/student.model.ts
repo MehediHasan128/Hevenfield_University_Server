@@ -28,6 +28,7 @@ const studentSchema = new Schema<TStudent>({
   userId: {
     type: Schema.Types.ObjectId,
     required: [true, 'User ID is required.'],
+    ref: 'User'
   },
   imageURL: { type: String },
   userName: userNameSchema,
@@ -79,8 +80,8 @@ const studentSchema = new Schema<TStudent>({
   // Admission Info
   batch: { type: String },
   section: { type: String },
-  addmissionSemester: { type: Schema.Types.ObjectId, required: [true, 'Admission semester is required.'], ref: '' },
-  academicDepartment: { type: Schema.Types.ObjectId, required: [true, 'Academic department is required.'], ref: '' },
+  addmissionSemester: { type: Schema.Types.ObjectId, required: [true, 'Admission semester is required.'], ref: 'AcademicSemester' },
+  academicDepartment: { type: Schema.Types.ObjectId, required: [true, 'Academic department is required.'], ref: 'AcademicDepartment' },
   addmissionFee: { type: Number, required: [true, 'Admission fee is required.'] },
   totalCredits: { type: Number, required: [true, 'Total credits are required.'] },
   creditCost: { type: Number, required: true},

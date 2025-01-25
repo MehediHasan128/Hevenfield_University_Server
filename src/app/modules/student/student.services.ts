@@ -1,24 +1,16 @@
+import QueryBuilder from "../../buildre/QueryBuildre";
+import { studentSearchableFields } from "./student.constant";
 import { Student } from "./student.model";
 
 const getAllStudentFromDB = async(query: Record<string, unknown>) => {
-    console.log('baseQuery', query);
-    const queryObj = {...query};
-    console.log('queryObj', queryObj);
+    const studentQuery = new QueryBuilder(Student.find().populate('addmissionSemester').populate({
+        path: 'academicDepartment',
+        populate: {path: 'academicFaculty'}
+    }), query).search(studentSearchableFields).filter().sort().paginate().fields();
 
-    let searchTerm = '';
-    if(query?.searchTerm) {
-        searchTerm = query?.searchTerm as string;
-    }
+    const data = await studentQuery.queryModel;
 
-    const studentSerachableFields = ['id', 'email', 'contactNumber'];
-
-    const searchQuery = await Student.find({
-        $or: studentSerachableFields.map((field) => ({
-            [field]: { $regex: searchTerm, $options: 'i'},
-        }))
-    });
-
-    return searchQuery;
+    return data;
 }
 
 
