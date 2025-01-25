@@ -28,8 +28,24 @@ const getSingleStudent = catchAsync(async(req, res) => {
     });
 });
 
+const updateStudent = catchAsync(async(req, res) => {
+
+    const {studentId} = req.params;
+    const updateData = req.body.student;
+
+    const data = await StudentServices.updateStudentIntoDB(studentId, updateData);    
+
+    sendResponce(res, {
+        success: true,
+        statusCode: 200,
+        message: 'Student information is updated successfully',
+        data: data
+    });
+});
+
 
 export const StudentController = {
     getAllStudent,
-    getSingleStudent
+    getSingleStudent,
+    updateStudent
 }
