@@ -41,12 +41,16 @@ const loginUser = async(payload: TUserLogin) => {
         userId: isUserExist?.id,
         userRole: isUserExist?.role
     };
-    // Create jwt token
+    
+    // Create jwt access token
     const accessToken = createToken(jwtPayload, config.jwt_access_secret_token as string, config.jwt_access_expires_in as string);
+    // Create jwt refresh token
+    const refreshToken = createToken(jwtPayload, config.jwt_refresh_secret_token as string, config.jwt_refresh_expires_in as string);
 
     
     return {
         accessToken,
+        refreshToken,
         needsPasswordChange: isUserExist?.needPasswordChange
     }
 };
