@@ -17,5 +17,8 @@ export default {
   jwt_refresh_expires_in: process.env.JWT_REFRESH_EXPIRE_IN,
   reset_password_ui_link: process.env.RESET_PASSWORD_UI_LINK,
   smtp_secreat_credential: process.env.SMTP_SECRET_CREDENTIAL,
-  company_email: process.env.COMPANY_EMAIL
+  company_email: process.env.COMPANY_EMAIL,
+  clodinary_cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  clodinary_api_key: process.env.CLOUDINARY_APY_KEY,
+  clodinary_api_secret: process.env.CLOUDINARY_APY_SECRET,
 };

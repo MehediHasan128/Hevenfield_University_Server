@@ -6,7 +6,7 @@ const createStudent = catchAsync(async(req, res) => {
 
     const {password, student: studentData} = req.body;
 
-    const data = await UserServices.createStudentIntoDB(password, studentData);
+    const data = await UserServices.createStudentIntoDB(req.file, password, studentData);
 
     sendResponce(res, {
         success: true,
