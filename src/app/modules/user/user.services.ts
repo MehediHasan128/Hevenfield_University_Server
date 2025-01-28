@@ -19,7 +19,6 @@ const createStudentIntoDB = async (
   password: string,
   payload: TStudent,
 ) => {
-  console.log(file);
   // Set all user data
 
   // Create a user object
