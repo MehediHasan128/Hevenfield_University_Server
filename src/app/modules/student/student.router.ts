@@ -14,4 +14,7 @@ router.get('/:studentId', StudentController.getSingleStudent);
 // Update student
 router.patch('/:studentId', valiDationRequest(StudentValidation.updateStudentValidationSchema), StudentController.updateStudent);
 
+// Delete student
+router.delete('/:studentId', StudentController.deleteStudent);
+
 export const StudentRoutes = router;
