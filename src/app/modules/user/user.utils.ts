@@ -100,3 +100,22 @@ export const generateBatch = async (
 
   return studentBatch;
 };
+
+export const generateFacultyId = async(departmentId: Types.ObjectId) => {
+  const currentDepartment = await AcademicDepartment.findById(departmentId, {_id: 0, departmentCode: 1});
+  const currentDepartmentCode = currentDepartment?.departmentCode;
+
+  let currentId = (0).toString();
+
+  const lastFacultyId = await findLastUser('faculty');
+  const lastdepartmentCode = lastFacultyId?.substring(2,7);
+  
+  if(lastFacultyId && lastdepartmentCode === currentDepartmentCode){
+    currentId = lastFacultyId?.substring(7);
+  }
+
+  let incrementId = (Number(currentId) + 1).toString().padStart(3, '0');
+  
+  incrementId = `F-${currentDepartmentCode}${incrementId}`;
+  return incrementId;
+}

@@ -61,4 +61,5 @@ export type TFaculty = {
   awardsAndAchievements?: string[] | undefined;
   recommendationLetters?: TRecommendationLetters | undefined;
   reference: TReference;
+  academicDepartment: Types.ObjectId;
 };

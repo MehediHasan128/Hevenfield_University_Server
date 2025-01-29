@@ -129,6 +129,11 @@ const facultSchema = new Schema<TFaculty>({
     type: referenceSchema,
     required: [true, 'Reference is required'],
   },
+  academicDepartment: {
+    type: Schema.Types.ObjectId,
+    required: [true, 'Academic department is required'],
+    ref: 'AcademicDepartment'
+  }
 });
 
 

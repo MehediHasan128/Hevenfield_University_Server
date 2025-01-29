@@ -54,53 +54,56 @@ const referenceValidationSchema = z.object({
 
 const createFacultyValidationSchema = z.object({
   body: z.object({
-    // Personal Information
-    userName: userNameValidationSchema,
-    email: z
-      .string()
-      .min(1, 'Email is required.')
-      .email('Invalid email format.'),
-    gender: z.enum(['male', 'female'], {
-      errorMap: () => ({ message: 'Gender must be either male or female.' }),
-    }),
-    dateOfBirth: z
-      .string({
-        required_error: 'Date of birth is required.',
-      })
-      .refine((value) => !isNaN(Date.parse(value)), {
-        message: 'Invalid date format.',
+    faculty: z.object({
+      // Personal Information
+      userName: userNameValidationSchema,
+      email: z
+        .string()
+        .min(1, 'Email is required.')
+        .email('Invalid email format.'),
+      gender: z.enum(['male', 'female'], {
+        errorMap: () => ({ message: 'Gender must be either male or female.' }),
       }),
-    contactNumber: z.string().min(1, 'Contact number is required.'),
-    bloodGroup: z
-      .enum(['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'], {
-        invalid_type_error: 'Invalid blood group.',
-      })
-      .optional(),
+      dateOfBirth: z
+        .string({
+          required_error: 'Date of birth is required.',
+        })
+        .refine((value) => !isNaN(Date.parse(value)), {
+          message: 'Invalid date format.',
+        }),
+      contactNumber: z.string().min(1, 'Contact number is required.'),
+      bloodGroup: z
+        .enum(['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'], {
+          invalid_type_error: 'Invalid blood group.',
+        })
+        .optional(),
 
-    // Address Info
-    presentAddress: z.string().min(1, 'Present address is required.'),
-    permanentAddress: z.string().min(1, 'Permanent address is required.'),
+      // Address Info
+      presentAddress: z.string().min(1, 'Present address is required.'),
+      permanentAddress: z.string().min(1, 'Permanent address is required.'),
 
-    // Educational Background
-    educationalBackground: educationalBackgroundValidationSchema,
+      // Educational Background
+      educationalBackground: educationalBackgroundValidationSchema,
 
-    // Professional Experience
-    professionalExperience: professionalExperienceValidationSchema.optional(),
+      // Professional Experience
+      professionalExperience: professionalExperienceValidationSchema.optional(),
 
-    // Skills and Certifications
-    skillsAndCertifications: z.array(z.string()).optional(),
+      // Skills and Certifications
+      skillsAndCertifications: z.array(z.string()).optional(),
 
-    // Sample Work Portfolio
-    sampleWorkPortfolio: sampleWorkPortfolioValidationSchema.optional(),
+      // Sample Work Portfolio
+      sampleWorkPortfolio: sampleWorkPortfolioValidationSchema.optional(),
 
-    // Recommendation Letters
-    recommendationLetters: recommendationLetterValidationSchema.optional(),
+      // Recommendation Letters
+      recommendationLetters: recommendationLetterValidationSchema.optional(),
 
-    // Awards and Achievements
-    awardsAndAchievements: z.array(z.string()).optional(),
+      // Awards and Achievements
+      awardsAndAchievements: z.array(z.string()).optional(),
 
-    // Reference
-    reference: referenceValidationSchema,
+      // Reference
+      reference: referenceValidationSchema,
+      academicDepartment: z.string()
+    }),
   }),
 });
 

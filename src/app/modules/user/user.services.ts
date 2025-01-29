@@ -9,10 +9,11 @@ import { Student } from '../student/student.model';
 import { TStudent } from '../student/student.interface';
 import { TFaculty } from '../faculty/faculty.interface';
 import calculateWaiver from '../../utils/calculateWaiver';
-import { generateBatch, generateStudentId } from './user.utils';
+import { generateBatch, generateFacultyId, generateStudentId } from './user.utils';
 import { sendImageToCloudinary } from '../../utils/sendImageToCloudinary';
 import { AcademicDepartment } from '../academicDepartment/academicDepartment.model';
 import { getDepartmentCostInformation } from '../../utils/getDepartmentCostInformation';
+import { Faculty } from '../faculty/faculty.model';
 
 const createStudentIntoDB = async (
   file: any,
@@ -33,7 +34,7 @@ const createStudentIntoDB = async (
   userData.email = payload.email;
   // set user name
   userData.userName = payload?.userName;
-  // id password is not given use default passwprd
+  // if password is not given use default password
   userData.password = password || (config.student_default_pass as string);
   // Set user role
   userData.role = 'student';
@@ -122,8 +123,67 @@ const createStudentIntoDB = async (
   }
 };
 
+
+
+
+
+
+
+
 const createFacultyIntoDB = async (password: string, payload: TFaculty) => {
-  console.log(payload, password);
+  
+  // Set all user data
+
+  // Create a user object
+  const userData: Partial<TUser> = {};
+  // Set user name
+  userData.userName = payload?.userName;
+  // Set user email
+  userData.email = payload?.email;
+  // if password is not given use default password
+  userData.password = password || (config.faculty_default_pass as string)
+  // Set user role
+  userData.role = 'faculty';
+  // set user id
+  const facultyID = await generateFacultyId(payload.academicDepartment as Types.ObjectId);
+  userData.id = facultyID;
+
+
+
+
+
+
+
+  // Crete user
+  const session = await startSession();
+
+  try {
+    session.startTransaction();
+
+    // Create a user (transaction-1)
+    const newUser = await User.create([userData], {session});
+    if (!newUser.length) {
+      throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create user');
+    }
+
+    // Set id or user id in faculty data
+    payload.id = newUser[0]?.id;
+    payload.userId = newUser[0]?._id;
+
+    // Create faculty
+    const newFaculty = await Faculty.create([payload], { session });
+    if (!newFaculty) {
+      throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create faculty');
+    }
+
+    await session.commitTransaction();
+    await session.endSession();
+    return newFaculty;
+  }catch(err){
+    await session.abortTransaction();
+    await session.endSession();
+    console.log(err);
+  }
 };
 
 export const UserServices = {
