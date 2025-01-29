@@ -20,12 +20,12 @@ const createStudentValidationSchema = z.object({
   body: z.object({
     student: z.object({
       userName: userNameValidationSchema,
-      email: z.string({ required_error: 'Email is required.' }).email({
-        message: 'Invalid email address.',
-      }),
+      email: z
+        .string()
+        .min(1, 'Email is required.')
+        .email('Invalid email format.'),
       gender: z.enum(['male', 'female'], {
-        required_error: 'Gender is required.',
-        invalid_type_error: 'Invalid gender.',
+        errorMap: () => ({ message: 'Gender must be either male or female.' }),
       }),
       dateOfBirth: z
         .string({
@@ -85,71 +85,102 @@ const createStudentValidationSchema = z.object({
   }),
 });
 
-
 const updateStudentValidationSchema = z.object({
   body: z.object({
     student: z.object({
       userName: userNameValidationSchema.optional(),
-      email: z.string({ required_error: 'Email is required.' }).email({
-        message: 'Invalid email address.',
-      }).optional(),
-      gender: z.enum(['male', 'female'], {
-        required_error: 'Gender is required.',
-        invalid_type_error: 'Invalid gender.',
-      }).optional(),
+      email: z
+        .string({ required_error: 'Email is required.' })
+        .email({
+          message: 'Invalid email address.',
+        })
+        .optional(),
+      gender: z
+        .enum(['male', 'female'], {
+          required_error: 'Gender is required.',
+          invalid_type_error: 'Invalid gender.',
+        })
+        .optional(),
       dateOfBirth: z
         .string({
           required_error: 'Date of birth is required.',
         })
         .refine((value) => !isNaN(Date.parse(value)), {
           message: 'Invalid date format.',
-        }).optional(),
-      contactNumber: z.string({
-        required_error: 'Contact number is required.',
-      }).optional(),
-      emergencyContactNumber: z.string({
-        required_error: 'Emergency contact number is required.',
-      }).optional(),
+        })
+        .optional(),
+      contactNumber: z
+        .string({
+          required_error: 'Contact number is required.',
+        })
+        .optional(),
+      emergencyContactNumber: z
+        .string({
+          required_error: 'Emergency contact number is required.',
+        })
+        .optional(),
       bloodGroup: z
         .enum(['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'], {
           invalid_type_error: 'Invalid blood group.',
         })
         .optional(),
-      presentAddress: z.string({
-        required_error: 'Present address is required.',
-      }).optional(),
-      permanentAddress: z.string({
-        required_error: 'Permanent address is required.',
-      }).optional(),
+      presentAddress: z
+        .string({
+          required_error: 'Present address is required.',
+        })
+        .optional(),
+      permanentAddress: z
+        .string({
+          required_error: 'Permanent address is required.',
+        })
+        .optional(),
       guardian: guardianValidationSchema.optional(),
       localGuardian: localGuardianValidationSchema.optional(),
-      sscRoll: z.string({
-        required_error: 'SSC roll is required.',
-      }).optional(),
-      sscResult: z.number({
-        required_error: 'SSC result is required.',
-      }).optional(),
-      hscRoll: z.string({
-        required_error: 'HSC roll is required.',
-      }).optional(),
-      hscResult: z.number({
-        required_error: 'HSC result is required.',
-      }).optional(),
-      addmissionSemester: z.string({
-        required_error: 'Admission semester is required.',
-      }).optional(),
-      academicDepartment: z.string({
-        required_error: 'Academic department is required.',
-      }).optional(),
-      addmissionFee: z.number({
-        required_error: 'Admission fee is required.',
-      }).optional(),
-      totalCredits: z.number({
-        required_error: 'Total credits are required.',
-      }).optional(),
-      totalCost: z.number({
-        required_error: 'Total cost is required.',
-      }).optional(),
+      sscRoll: z
+        .string({
+          required_error: 'SSC roll is required.',
+        })
+        .optional(),
+      sscResult: z
+        .number({
+          required_error: 'SSC result is required.',
+        })
+        .optional(),
+      hscRoll: z
+        .string({
+          required_error: 'HSC roll is required.',
+        })
+        .optional(),
+      hscResult: z
+        .number({
+          required_error: 'HSC result is required.',
+        })
+        .optional(),
+      addmissionSemester: z
+        .string({
+          required_error: 'Admission semester is required.',
+        })
+        .optional(),
+      academicDepartment: z
+        .string({
+          required_error: 'Academic department is required.',
+        })
+        .optional(),
+      addmissionFee: z
+        .number({
+          required_error: 'Admission fee is required.',
+        })
+        .optional(),
+      totalCredits: z
+        .number({
+          required_error: 'Total credits are required.',
+        })
+        .optional(),
+      totalCost: z
+        .number({
+          required_error: 'Total cost is required.',
+        })
+        .optional(),
       isDeleted: z.boolean().optional(),
     }),
   }),
@@ -157,5 +188,5 @@ const updateStudentValidationSchema = z.object({
 
 export const StudentValidation = {
   createStudentValidationSchema,
-  updateStudentValidationSchema
+  updateStudentValidationSchema,
 };

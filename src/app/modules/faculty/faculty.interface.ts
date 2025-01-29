@@ -44,7 +44,9 @@ export type TFaculty = {
   userName: TUserName;
   email: string;
   gender: 'male' | 'female';
+  dateOfBirth: Date;
   contactNumber: string;
+  bloodGroup?: 'A+' | 'A-' | 'B+' | 'B-' | 'O+' | 'O-' | 'AB+' | 'AB-';
 
   // Address Info
   presentAddress: string;

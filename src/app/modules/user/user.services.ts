@@ -5,14 +5,14 @@ import httpStatus from 'http-status';
 import { TUser } from './user.interface';
 import AppError from '../../errors/AppError';
 import { startSession, Types } from 'mongoose';
-import { generateBatch, generateStudentId } from './user.utils';
 import { Student } from '../student/student.model';
 import { TStudent } from '../student/student.interface';
+import { TFaculty } from '../faculty/faculty.interface';
 import calculateWaiver from '../../utils/calculateWaiver';
+import { generateBatch, generateStudentId } from './user.utils';
+import { sendImageToCloudinary } from '../../utils/sendImageToCloudinary';
 import { AcademicDepartment } from '../academicDepartment/academicDepartment.model';
 import { getDepartmentCostInformation } from '../../utils/getDepartmentCostInformation';
-import { TFaculty } from '../faculty/faculty.interface';
-import { sendImageToCloudinary } from '../../utils/sendImageToCloudinary';
 
 const createStudentIntoDB = async (
   file: any,

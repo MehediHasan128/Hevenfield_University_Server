@@ -82,9 +82,15 @@ const facultSchema = new Schema<TFaculty>({
     enum: ['male', 'female'],
     required: [true, 'Gender is required'],
   },
+  dateOfBirth: { type: Date, required: [true, 'Date of birth is required.'] },
   contactNumber: {
     type: String,
     required: [true, 'Contact number is required'],
+  },
+  bloodGroup: {
+    type: String,
+    enum: ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'],
+    message: 'Invalid blood group.',
   },
 
   // Address Info
