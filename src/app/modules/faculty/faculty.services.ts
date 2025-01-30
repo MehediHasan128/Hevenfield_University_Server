@@ -104,7 +104,7 @@ const deleteFacultyFromDb = async(facultyId: string) => {
         console.log(error);
     }
 
-}
+};
 
 export const FacultyServices = {
   getAllFacultyFromDB,
