@@ -21,7 +21,7 @@ const createFaculty = catchAsync(async(req, res) => {
 
     const {password, faculty: facultyData} = req.body;
 
-    const data = await UserServices.createFacultyIntoDB(password, facultyData);
+    const data = await UserServices.createFacultyIntoDB(req.file, password, facultyData);
 
     sendResponce(res, {
         success: true,

@@ -130,11 +130,10 @@ const createStudentIntoDB = async (
 
 
 
-const createFacultyIntoDB = async (password: string, payload: TFaculty) => {
-  
+const createFacultyIntoDB = async (file: any, password: string, payload: TFaculty) => {
   // Set all user data
-
-  // Create a user object
+  
+  // // Create a user object
   const userData: Partial<TUser> = {};
   // Set user name
   userData.userName = payload?.userName;
@@ -152,13 +151,19 @@ const createFacultyIntoDB = async (password: string, payload: TFaculty) => {
 
 
 
-
-
   // Crete user
   const session = await startSession();
 
   try {
     session.startTransaction();
+
+
+    // Upload image to cloudinary
+    const imageName = `${facultyID}-${payload?.userName?.lastName}`;
+    const imagePath = file?.path
+    const uploadImage = await sendImageToCloudinary(imagePath, imageName);
+    payload.imageURL = uploadImage?.secure_url;
+
 
     // Create a user (transaction-1)
     const newUser = await User.create([userData], {session});

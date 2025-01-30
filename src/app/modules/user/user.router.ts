@@ -18,6 +18,17 @@ router.post(
   valiDationRequest(StudentValidation.createStudentValidationSchema),
   UserController.createStudent,
 );
-router.post('/create-faculty', valiDationRequest(FacultyValidation.createFacultyValidationSchema), UserController.createFaculty);
+
+// Create faculty
+router.post(
+  '/create-faculty',
+  upload.single('file'),
+  (req: Request, res: Response, next: NextFunction) => {
+    req.body = JSON.parse(req.body.data);
+    next();
+  },
+  valiDationRequest(FacultyValidation.createFacultyValidationSchema),
+  UserController.createFaculty,
+);
 
 export const UserRoutes = router;
