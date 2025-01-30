@@ -9,6 +9,7 @@ export default {
   database_url: process.env.DATABASE_URL,
   student_default_pass: process.env.STUDENT_DEFAULT_PASS,
   faculty_default_pass: process.env.FACULTY_DEFAULT_PASS,
+  admin_default_pass: process.env.ADMIN_DEFAULT_PASS,
   total_semester: process.env.TOTAL_SEMESTER,
   student_capacity: process.env.STUDENT_CAPACITY,
   bcrypt_salt_round: process.env.BCRYPT_SALT_ROUND,

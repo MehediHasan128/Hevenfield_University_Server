@@ -9,11 +9,18 @@ import { Student } from '../student/student.model';
 import { TStudent } from '../student/student.interface';
 import { TFaculty } from '../faculty/faculty.interface';
 import calculateWaiver from '../../utils/calculateWaiver';
-import { generateBatch, generateFacultyId, generateStudentId } from './user.utils';
+import {
+  generateAdminId,
+  generateBatch,
+  generateFacultyId,
+  generateStudentId,
+} from './user.utils';
 import { sendImageToCloudinary } from '../../utils/sendImageToCloudinary';
 import { AcademicDepartment } from '../academicDepartment/academicDepartment.model';
 import { getDepartmentCostInformation } from '../../utils/getDepartmentCostInformation';
 import { Faculty } from '../faculty/faculty.model';
+import { TAdmin } from '../admin/admin.interface';
+import { Admin } from '../admin/admin.model';
 
 const createStudentIntoDB = async (
   file: any,
@@ -38,10 +45,6 @@ const createStudentIntoDB = async (
   userData.password = password || (config.student_default_pass as string);
   // Set user role
   userData.role = 'student';
-
-
-
-
 
   // Calculate costing
 
@@ -82,10 +85,6 @@ const createStudentIntoDB = async (
   payload.batch = studentBatch;
   payload.section = 'A';
 
-
-
-
-
   // User transaction rollback functionality
 
   // Start a session
@@ -97,7 +96,7 @@ const createStudentIntoDB = async (
 
     // Upload image to cloudinary
     const imageName = `${studenId}-${payload?.userName?.lastName}`;
-    const imagePath = file?.path
+    const imagePath = file?.path;
     const uploadImage = await sendImageToCloudinary(imagePath, imageName);
     payload.imageURL = uploadImage?.secure_url;
 
@@ -123,16 +122,13 @@ const createStudentIntoDB = async (
   }
 };
 
-
-
-
-
-
-
-
-const createFacultyIntoDB = async (file: any, password: string, payload: TFaculty) => {
+const createFacultyIntoDB = async (
+  file: any,
+  password: string,
+  payload: TFaculty,
+) => {
   // Set all user data
-  
+
   // // Create a user object
   const userData: Partial<TUser> = {};
   // Set user name
@@ -140,16 +136,14 @@ const createFacultyIntoDB = async (file: any, password: string, payload: TFacult
   // Set user email
   userData.email = payload?.email;
   // if password is not given use default password
-  userData.password = password || (config.faculty_default_pass as string)
+  userData.password = password || (config.faculty_default_pass as string);
   // Set user role
   userData.role = 'faculty';
   // set user id
-  const facultyID = await generateFacultyId(payload.academicDepartment as Types.ObjectId);
+  const facultyID = await generateFacultyId(
+    payload.academicDepartment as Types.ObjectId,
+  );
   userData.id = facultyID;
-
-
-
-
 
   // Crete user
   const session = await startSession();
@@ -157,16 +151,14 @@ const createFacultyIntoDB = async (file: any, password: string, payload: TFacult
   try {
     session.startTransaction();
 
-
     // Upload image to cloudinary
     const imageName = `${facultyID}-${payload?.userName?.lastName}`;
-    const imagePath = file?.path
+    const imagePath = file?.path;
     const uploadImage = await sendImageToCloudinary(imagePath, imageName);
     payload.imageURL = uploadImage?.secure_url;
 
-
     // Create a user (transaction-1)
-    const newUser = await User.create([userData], {session});
+    const newUser = await User.create([userData], { session });
     if (!newUser.length) {
       throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create user');
     }
@@ -184,14 +176,73 @@ const createFacultyIntoDB = async (file: any, password: string, payload: TFacult
     await session.commitTransaction();
     await session.endSession();
     return newFaculty;
-  }catch(err){
+  } catch (err) {
     await session.abortTransaction();
     await session.endSession();
     console.log(err);
   }
 };
 
+const createAdminIntoDB = async (file: any, password: string, payload: TAdmin) => {
+  // Check the admin is assign in this department
+  const isExistsAdmin = await Admin.findOne({menegingDepartment: payload?.menegingDepartment});
+  if(isExistsAdmin){
+    throw new AppError(httpStatus.BAD_REQUEST, 'This department already have an admin')
+  }
+
+
+  // set all user data
+  // Create user
+
+  const userData: Partial<TUser> = {};
+
+  // Set user id
+  const adminId = await generateAdminId(payload?.menegingDepartment);
+  userData.id = adminId;
+  // Set user email
+  userData.email = payload?.email;
+  // Set user name
+  userData.userName = payload?.userName;
+  // Set user password
+  userData.password = password || config.admin_default_pass;
+  // Set user role
+  userData.role = 'admin';
+
+
+  // Start transection rollback
+  const session = await startSession();
+
+  try {
+    session.startTransaction();
+
+    // Upload image to cloudinary
+    const imageName = `${adminId}-${payload?.userName?.lastName}`;
+    const imagePath = file?.path;
+    const uploadImage = await sendImageToCloudinary(imagePath, imageName);
+    payload.imageURL = uploadImage?.secure_url;
+
+    // Create user into db
+    const newUser = await User.create([userData], { session });
+
+    // Set userId or employ id in admin collection
+    payload.id = newUser[0]?.id;
+    payload.userId = newUser[0]?._id;
+
+    // Now create admin into db
+    const newAdmin = await Admin.create([payload], { session });
+
+    await session.commitTransaction();
+    await session.endSession();
+    return newAdmin;
+  } catch (error) {
+    await session.abortTransaction();
+    await session.endSession();
+    console.log(error);
+  }
+};
+
 export const UserServices = {
   createStudentIntoDB,
   createFacultyIntoDB,
+  createAdminIntoDB,
 };

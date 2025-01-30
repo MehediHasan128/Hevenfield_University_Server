@@ -1,7 +1,7 @@
 import { Types } from 'mongoose';
 import { TUserName } from '../user/user.constant';
 
-export type TFaculty = {
+export type TAdmin = {
   id: string;
   userId: Types.ObjectId;
 
@@ -20,5 +20,6 @@ export type TFaculty = {
   permanentAddress: string;
 
   //   Department info
-  menegingDepartment: Types.ObjectId
+  menegingDepartment: Types.ObjectId;
+  isDeleted: boolean;
 };

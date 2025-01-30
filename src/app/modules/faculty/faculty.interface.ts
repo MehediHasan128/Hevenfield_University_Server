@@ -62,4 +62,5 @@ export type TFaculty = {
   recommendationLetters?: TRecommendationLetters | undefined;
   reference: TReference;
   academicDepartment: Types.ObjectId;
+  isDeleted: boolean;
 };
