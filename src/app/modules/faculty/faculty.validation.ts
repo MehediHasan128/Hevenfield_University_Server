@@ -107,6 +107,63 @@ const createFacultyValidationSchema = z.object({
   }),
 });
 
+
+
+const updateFacultyValidationSchema = z.object({
+  body: z.object({
+    faculty: z.object({
+      // Personal Information
+      userName: userNameValidationSchema.optional(),
+      email: z
+        .string()
+        .min(1, 'Email is required.')
+        .email('Invalid email format.').optional(),
+      gender: z.enum(['male', 'female'], {
+        errorMap: () => ({ message: 'Gender must be either male or female.' }),
+      }).optional(),
+      dateOfBirth: z
+        .string({
+          required_error: 'Date of birth is required.',
+        })
+        .refine((value) => !isNaN(Date.parse(value)), {
+          message: 'Invalid date format.',
+        }).optional(),
+      contactNumber: z.string().min(1, 'Contact number is required.').optional(),
+      bloodGroup: z
+        .enum(['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'], {
+          invalid_type_error: 'Invalid blood group.',
+        })
+        .optional(),
+
+      // Address Info
+      presentAddress: z.string().min(1, 'Present address is required.').optional(),
+      permanentAddress: z.string().min(1, 'Permanent address is required.').optional(),
+
+      // Educational Background
+      educationalBackground: educationalBackgroundValidationSchema.optional(),
+
+      // Professional Experience
+      professionalExperience: professionalExperienceValidationSchema.optional(),
+
+      // Skills and Certifications
+      skillsAndCertifications: z.array(z.string()).optional(),
+
+      // Sample Work Portfolio
+      sampleWorkPortfolio: sampleWorkPortfolioValidationSchema.optional(),
+
+      // Recommendation Letters
+      recommendationLetters: recommendationLetterValidationSchema.optional(),
+
+      // Awards and Achievements
+      awardsAndAchievements: z.array(z.string()).optional(),
+
+      // Reference
+      reference: referenceValidationSchema.optional()
+    }),
+  }),
+});
+
 export const FacultyValidation = {
   createFacultyValidationSchema,
+  updateFacultyValidationSchema
 };
