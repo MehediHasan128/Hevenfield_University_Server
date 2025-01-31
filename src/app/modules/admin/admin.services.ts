@@ -67,7 +67,7 @@ const updateAdminIntoDB = async(adminId: string, payload: Partial<TAdmin>) => {
 const deleteAdminFromDb = async(adminId: string) => {
 
     // Check if the faculty is exist or not
-    const isExistsFaculty = await User.findOne({id: adminId, role: 'faculty'});
+    const isExistsFaculty = await User.findOne({id: adminId, role: 'admin'});
     if(!isExistsFaculty){
         throw new AppError(httpStatus.BAD_REQUEST, 'Faculty not found');
     };
