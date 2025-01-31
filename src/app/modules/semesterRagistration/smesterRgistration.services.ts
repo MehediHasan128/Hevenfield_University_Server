@@ -1,3 +1,4 @@
+import QueryBuilder from "../../buildre/QueryBuildre";
 import AppError from "../../errors/AppError";
 import { AcademicSemester } from "../academicSemester/academicSemester.model";
 import { registrationStatus } from "./smesterRgistration.constant";
@@ -47,8 +48,10 @@ const createSemesterRegistrationIntoDB = async(payload: TSemesterRegistration) =
 
 }
 
-const getAllSemesterRegistrationFromDB = async() => {
-    console.log(2);
+const getAllSemesterRegistrationFromDB = async(query: Record<string, unknown>) => {
+    const semesterRegistrationQuery = new QueryBuilder(SemesterRegistration.find(), query).filter().sort().paginate().fields();
+    const data = await semesterRegistrationQuery.queryModel;
+    return data;
 }
 
 const getSingleSemesterRegistrationFromDB = async() => {
