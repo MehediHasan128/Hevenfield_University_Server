@@ -30,7 +30,7 @@ const getAllSemesterRegistration = catchAsync(async(req, res) => {
 
 const getSingleSemesterRegistration = catchAsync(async(req, res) => {
 
-    const data = await SemesterRegistrationServices.getSingleSemesterRegistrationFromDB();
+    const data = await SemesterRegistrationServices.getSingleSemesterRegistrationFromDB(req.params.semesterRegistrationId);
 
     sendResponce(res, {
         success: true,
