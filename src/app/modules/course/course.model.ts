@@ -31,12 +31,6 @@ const CourseSchema = new Schema<TCourse>({
         required: [true, "Course code is required"],
         trim: true,
     },
-    courseCode: {
-        type: String,
-        required: [true, "Full course code is required"],
-        unique: true,
-        trim: true,
-    },
     credits: {
         type: Number,
         required: [true, "Credits are required"],
