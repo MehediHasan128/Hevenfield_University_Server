@@ -41,7 +41,7 @@ const getSingleCourse = catchAsync(async (req, res) => {
 
 const updateSingleCourse = catchAsync(async (req, res) => {
 
-  const data = await CourseServices.updateSingleCourseIntoDB();
+  const data = await CourseServices.updateSingleCourseIntoDB(req.params.courseId, req.body);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -53,7 +53,7 @@ const updateSingleCourse = catchAsync(async (req, res) => {
 
 const deleteCourse = catchAsync(async (req, res) => {
 
-  const data = await CourseServices.deleteCourseFromDB();
+  const data = await CourseServices.deleteCourseFromDB(req.params.courseId);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -65,7 +65,7 @@ const deleteCourse = catchAsync(async (req, res) => {
 
 const assignFacultiesWithCourse = catchAsync(async(req, res) => {
 
-  const data = await CourseServices.assignFacultiesWithCourseIntoDB();
+  const data = await CourseServices.assignFacultiesWithCourseIntoDB(req.params.courseId, req.body);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -77,7 +77,7 @@ const assignFacultiesWithCourse = catchAsync(async(req, res) => {
 
 const removeFacultiesWithCourse = catchAsync(async(req, res) => {
 
-  const data = await CourseServices.removeFacultiesWithCourseFromDB();
+  const data = await CourseServices.removeFacultiesWithCourseFromDB(req.params.courseId, req.body);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

@@ -21,5 +21,10 @@ router.get(
   '/:courseId',
   CourseController.getSingleCourse,
 );
+// update single course
+router.patch(
+  '/:courseId',
+  CourseController.updateSingleCourse,
+);
 
 export const CourseRoutes = router;
