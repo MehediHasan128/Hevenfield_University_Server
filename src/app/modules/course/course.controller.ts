@@ -29,7 +29,7 @@ const getAllCourse = catchAsync(async (req, res) => {
 
 const getSingleCourse = catchAsync(async (req, res) => {
 
-  const data = await CourseServices.getSingleCorseFromDB();
+  const data = await CourseServices.getSingleCorseFromDB(req.params.courseId);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

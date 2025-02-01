@@ -16,5 +16,10 @@ router.get(
   '/',
   CourseController.getAllCourse,
 );
+// get single course
+router.get(
+  '/:courseId',
+  CourseController.getSingleCourse,
+);
 
 export const CourseRoutes = router;

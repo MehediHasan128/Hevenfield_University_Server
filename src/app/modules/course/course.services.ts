@@ -26,8 +26,11 @@ const getAllCourseFromDB = async(query: Record<string, unknown>) => {
 
 };
 
-const getSingleCorseFromDB = async() => {
-    console.log(3);
+const getSingleCorseFromDB = async(courseId: string) => {
+    
+    const data = await Course.findById(courseId);
+    return data;
+
 };
 
 const updateSingleCourseIntoDB = async() => {
@@ -41,7 +44,6 @@ const deleteCourseFromDB = async() => {
 const assignFacultiesWithCourseIntoDB = async() => {
     console.log(6);
 }
-
 
 const removeFacultiesWithCourseFromDB = async() => {
     console.log(7);
