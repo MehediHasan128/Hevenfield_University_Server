@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { NextFunction, Request, Response } from "express";
-import { TErrorSource } from "../interface/error";
-import { ZodError } from "zod";
-import handleZodError from "../errors/handleZodError";
-import handleValidationError from "../errors/handleValidationError";
-import handleCastError from "../errors/handleCastError";
-import handleDuplicateError from "../errors/handleDuplicateError";
-import AppError from "../errors/AppError";
 import config from "../config";
+import { ZodError } from "zod";
+import AppError from "../errors/AppError";
+import { TErrorSource } from "../interface/error";
+import handleZodError from "../errors/handleZodError";
+import handleCastError from "../errors/handleCastError";
+import { NextFunction, Request, Response } from "express";
+import handleValidationError from "../errors/handleValidationError";
+import handleDuplicateError from "../errors/handleDuplicateError";
 
 const globalErrorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
 
