@@ -2,6 +2,7 @@ import AppError from '../../errors/AppError';
 import httpStatus from 'http-status';
 import { TCourse } from './course.interface';
 import { Course } from './course.model';
+import QueryBuilder from '../../buildre/QueryBuildre';
 
 const createCourseIntoDB = async(payload: TCourse) => {
   
@@ -17,8 +18,12 @@ const createCourseIntoDB = async(payload: TCourse) => {
 
 };
 
-const getAllCourseFromDB = async() => {
-    console.log(2);
+const getAllCourseFromDB = async(query: Record<string, unknown>) => {
+    
+    const CourseQuery = new QueryBuilder(Course.find(), query).filter().sort().paginate().fields();
+    const data = await CourseQuery.queryModel;
+    return data;
+
 };
 
 const getSingleCorseFromDB = async() => {
