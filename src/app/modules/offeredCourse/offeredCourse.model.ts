@@ -13,9 +13,9 @@ const createOfferedCourseSchema = new Schema<TOfferedCourse>({
         ref: "AcademicSemester", 
         required: [true, "Academic semester is required"] 
     },
-    academicFaculty: { 
+    academicSchool: { 
         type: Schema.Types.ObjectId, 
-        ref: "AcademicFaculty", 
+        ref: "AcademicSchool", 
         required: [true, "Academic faculty is required"] 
     },
     academicDepartment: { 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import config from "../config";
 import httpStatus from 'http-status';
 import AppError from "../errors/AppError";
@@ -17,10 +18,15 @@ const Auth = (...requiredRole: TUserRole[]) => {
         }
 
         // Decoded the user token
-        const decoded = jwt.verify(
-            token,
-            config.jwt_access_secret_token as string
-        ) as JwtPayload;
+        let decoded
+        try{
+            decoded = jwt.verify(
+                token,
+                config.jwt_access_secret_token as string
+            ) as JwtPayload;
+        }catch(error){
+            throw new AppError(httpStatus.UNAUTHORIZED, 'Unauthorized person');
+        }
 
         const {userEmail, userRole} = decoded;
 

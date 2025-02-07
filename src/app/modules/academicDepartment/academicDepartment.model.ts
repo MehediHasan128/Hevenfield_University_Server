@@ -5,7 +5,7 @@ import httpStatus from 'http-status';
 
 const createAcademicDepartmentSchema = new Schema<TAcademicDepartment>({
 
-    academicFaculty: {
+    academicSchool: {
         type: Schema.Types.ObjectId,
         ref: 'AcademicFaculties', // Replace with your actual faculty model name
         required: [true, 'Academic faculty is required.'],

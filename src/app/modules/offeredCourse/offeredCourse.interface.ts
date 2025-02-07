@@ -4,7 +4,7 @@ import { TDays } from "./offeredCourse.constant";
 export type TOfferedCourse = {
     semesterRegistration: Types.ObjectId;
     academicSemester: Types.ObjectId;
-    academicFaculty: Types.ObjectId;
+    academicSchool: Types.ObjectId;
     academicDepartment: Types.ObjectId;
     course: Types.ObjectId;
     faculty: Types.ObjectId;

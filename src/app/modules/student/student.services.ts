@@ -13,7 +13,7 @@ const getAllStudentFromDB = async (query: Record<string, unknown>) => {
       .populate('addmissionSemester')
       .populate({
         path: 'academicDepartment',
-        populate: { path: 'academicFaculty' },
+        populate: { path: 'academicSchool' },
       }),
     query,
   )
@@ -33,7 +33,7 @@ const getSingleStudentFromDB = async (studentId: string) => {
     .populate('addmissionSemester')
     .populate({
       path: 'academicDepartment',
-      populate: { path: 'academicFaculty' },
+      populate: { path: 'academicSchool' },
     });
   if (!isStudentExist) {
     throw new AppError(

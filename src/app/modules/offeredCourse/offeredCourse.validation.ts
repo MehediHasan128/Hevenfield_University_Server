@@ -7,7 +7,7 @@ const createOfferedCourseValidationSchema = z.object({
       required_error: 'Registered semester is required.',
     }),
 
-    academicFaculty: z.string({
+    academicSchool: z.string({
       required_error: 'Academic faculty is required.',
     }),
 
