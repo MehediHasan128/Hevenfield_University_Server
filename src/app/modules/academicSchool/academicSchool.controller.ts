@@ -14,7 +14,21 @@ const createAcademicSchool = catchAsync(async(req, res) => {
     })
 });
 
+
+const getAllAcademicSchool = catchAsync(async(req, res) => {
+
+    const data = await AcademicSchoolServices.getAllAcademicSchoolFromDB();
+
+    sendResponce(res, {
+        success: true,
+        statusCode: 200,
+        message: 'Academic school retrive successfully',
+        data: data
+    })
+});
+
 export const AcademicSchoolController = {
-    createAcademicSchool
+    createAcademicSchool,
+    getAllAcademicSchool
 }
 

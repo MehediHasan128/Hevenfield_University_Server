@@ -17,7 +17,7 @@ const createAcademicSemester = catchAsync(async(req, res) => {
 
 const getAllAcademicSemester = catchAsync(async(req, res) => {
 
-    const data = await AcademicSemesterServices.getAllAcademicSemesterFromDB();
+    const data = await AcademicSemesterServices.getAllAcademicSemesterFromDB(req.query);
 
     sendResponce(res, {
         success: true,

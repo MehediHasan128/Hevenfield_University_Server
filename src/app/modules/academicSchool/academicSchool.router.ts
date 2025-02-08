@@ -17,4 +17,12 @@ router.post(
   AcademicSchoolController.createAcademicSchool
 );
 
+
+// Create academic faculty
+router.post(
+  '/',
+  Auth(userRole.admin),
+  AcademicSchoolController.getAllAcademicSchool
+);
+
 export const AcademicSchoolRoutes = router;

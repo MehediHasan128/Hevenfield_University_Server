@@ -6,6 +6,12 @@ const createAcademicSchoolIntoDB = async (payload: TAcademicSchool) => {
   return data;
 };
 
+const getAllAcademicSchoolFromDB = async () => {
+  const data = await AcademicSchool.find();
+  return data;
+};
+
 export const AcademicSchoolServices = {
   createAcademicSchoolIntoDB,
+  getAllAcademicSchoolFromDB
 };
