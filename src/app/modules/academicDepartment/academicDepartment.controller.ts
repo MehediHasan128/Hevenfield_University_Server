@@ -14,6 +14,20 @@ const createAcademicDepartment = catchAsync(async(req, res) => {
     })
 });
 
+
+const getAllAcademicDepartment = catchAsync(async(req, res) => {
+
+    const data = await AcademicDepartmentServices.getAllACademicDepartmentFromDB(req.query);
+
+    sendResponce(res, {
+        success: true,
+        statusCode: 200,
+        message: 'Academic department is retrive successfully',
+        data: data
+    })
+});
+
 export const AcademicDepartmentController = {
-    createAcademicDepartment
+    createAcademicDepartment,
+    getAllAcademicDepartment
 }

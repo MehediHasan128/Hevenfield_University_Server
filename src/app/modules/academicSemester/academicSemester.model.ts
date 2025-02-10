@@ -56,6 +56,12 @@ const createAcademicSemesterSchema = new Schema<TAcademicSemester>({
       message: (props) => `${props.value} is not a valid month.`,
     },
   },
+  addmissionStatus: {
+    type: String,
+    enum: ['open', 'close'],
+    required: true,
+    default: 'close'
+  }
 },{
   timestamps: true
 });

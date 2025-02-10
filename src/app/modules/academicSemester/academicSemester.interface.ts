@@ -21,6 +21,7 @@ export type TAcademicSemester = {
     year: string;
     startMonth: TMonths;
     endMonth: TMonths;
+    addmissionStatus: 'open' | 'close'
 };
 
 export type TAcademicSemesterNameCodeMapper = {

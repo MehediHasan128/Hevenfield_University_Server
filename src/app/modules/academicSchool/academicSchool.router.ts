@@ -19,7 +19,7 @@ router.post(
 
 
 // Create academic faculty
-router.post(
+router.get(
   '/',
   Auth(userRole.admin),
   AcademicSchoolController.getAllAcademicSchool
