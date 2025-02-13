@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { userNameValidationSchema } from '../user/user.validation';
+import { addressValidationSchema } from '../../constant';
 
 const createAdminValidationSchema = z.object({
   body: z.object({
@@ -33,12 +34,8 @@ const createAdminValidationSchema = z.object({
         }),
 
       // Address Info
-      presentAddress: z
-        .string()
-        .min(1, { message: 'Present address is required' }),
-      permanentAddress: z
-        .string()
-        .min(1, { message: 'Permanent address is required' }),
+      presentAddress: addressValidationSchema,
+      permanentAddress: addressValidationSchema,
 
       // Department Info
       menegingDepartment: z

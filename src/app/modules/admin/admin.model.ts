@@ -1,6 +1,7 @@
 import { model, Schema } from 'mongoose';
 import { userNameSchema } from '../user/user.constant';
 import { TAdmin } from './admin.interface';
+import { addressSchema } from '../../constant';
 
 const AdminSchema = new Schema<TAdmin>(
   {
@@ -46,12 +47,10 @@ const AdminSchema = new Schema<TAdmin>(
 
     // Address Info
     presentAddress: {
-      type: String,
-      required: [true, 'Present address is required'],
+      type: addressSchema,
     },
     permanentAddress: {
-      type: String,
-      required: [true, 'Permanent address is required'],
+      type: addressSchema,
     },
 
     // Department Info

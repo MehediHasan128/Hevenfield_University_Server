@@ -149,6 +149,6 @@ export const generateAdminId = async (departmentId: Types.ObjectId) => {
     _id: 0,
     departmentCode: 1,
   });
-  const adminId = `FAC-${department?.departmentCode}`;
+  const adminId = `ADM-${department?.departmentCode}`;
   return adminId;
 };
