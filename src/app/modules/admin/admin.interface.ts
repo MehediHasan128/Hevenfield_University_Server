@@ -1,5 +1,6 @@
 import { Types } from 'mongoose';
 import { TUserName } from '../user/user.constant';
+import { TAddress } from '../../constant';
 
 export type TAdmin = {
   id: string;
@@ -16,8 +17,8 @@ export type TAdmin = {
   dateOfJoining: Date;
 
   // Address Info
-  presentAddress: string;
-  permanentAddress: string;
+  presentAddress: TAddress;
+  permanentAddress: TAddress;
 
   //   Department info
   menegingDepartment: Types.ObjectId;
