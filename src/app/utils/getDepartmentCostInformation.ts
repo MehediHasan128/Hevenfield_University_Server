@@ -1,13 +1,13 @@
-import { DepartmentCostInformation } from "../constant/departmentCostInformation"
+import { Types } from "mongoose";
+import { AcademicDepartment } from "../modules/academicDepartment/academicDepartment.model";
 
-export const getDepartmentCostInformation = (departmentName: string) => {
-    const credits = DepartmentCostInformation[departmentName].total_credits;
-    const creditCost = DepartmentCostInformation[departmentName].credits_cost;
-    const addmissionFees = DepartmentCostInformation[departmentName].addmission_fees;
+export type TDepartmentData = {
+    addmission_fees: number;
+    total_credits: number;
+    credit_cost: number;
+}
 
-    return {
-        credits,
-        creditCost,
-        addmissionFees
-    }
+export const getDepartmentCostInformation = async(departmentId: Types.ObjectId) => {
+    const departmentData = await AcademicDepartment.findById(departmentId, {_id: 0, addmission_fees: 1, total_credits: 1, credit_cost: 1});
+    return departmentData
 }

@@ -16,8 +16,10 @@ import {
   generateStudentId,
 } from './user.utils';
 import { sendImageToCloudinary } from '../../utils/sendImageToCloudinary';
-import { AcademicDepartment } from '../academicDepartment/academicDepartment.model';
-import { getDepartmentCostInformation } from '../../utils/getDepartmentCostInformation';
+import {
+  getDepartmentCostInformation,
+  TDepartmentData,
+} from '../../utils/getDepartmentCostInformation';
 import { Faculty } from '../faculty/faculty.model';
 import { TAdmin } from '../admin/admin.interface';
 import { Admin } from '../admin/admin.model';
@@ -29,13 +31,16 @@ const createStudentIntoDB = async (
   password: string,
   payload: TStudent,
 ) => {
-
-
-  const academicsemester = await AcademicSemester.findById(payload.addmissionSemester, {_id: 0, addmissionStatus: 1});
-  if(academicsemester!.addmissionStatus === 'close'){
-    throw new AppError(httpStatus.BAD_REQUEST, "We're sorry, the admissions for this semester are now closed.")
+  const academicsemester = await AcademicSemester.findById(
+    payload.addmissionSemester,
+    { _id: 0, addmissionStatus: 1 },
+  );
+  if (academicsemester!.addmissionStatus === 'close') {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "We're sorry, the admissions for this semester are now closed.",
+    );
   }
-
 
   // Set all user data
 
@@ -62,28 +67,26 @@ const createStudentIntoDB = async (
   const waiver = calculateWaiver(payload.sscResult, payload.hscResult);
   // Set waiver
   payload.waiver = `${waiver}%`;
-  // get department name
-  const academicDepartment = await AcademicDepartment.findById(
+
+  // get department data
+  const departmentData = await getDepartmentCostInformation(
     payload.academicDepartment,
-    { _id: 0, departmentName: 1 },
   );
-  // Get department cost information
-  const departmentCostInformation = getDepartmentCostInformation(
-    academicDepartment?.departmentName as string,
-  );
-  const { credits, creditCost, addmissionFees } = departmentCostInformation;
+  const { addmission_fees, total_credits, credit_cost } =
+    departmentData as TDepartmentData;
   // Set credits cost
-  payload.creditCost = creditCost;
+  payload.creditCost = credit_cost;
   // Set credit cost after waiver
-  payload.creditCostAfterWaiver = creditCost - creditCost * (waiver / 100);
+  payload.creditCostAfterWaiver = credit_cost - credit_cost * (waiver / 100);
   // Set addmission fees
-  payload.addmissionFee = addmissionFees;
+  payload.addmissionFee = addmission_fees;
   // Set total creadits
-  payload.totalCredits = credits;
+  payload.totalCredits = total_credits;
   // calculate total addmission fees in 4 years
-  const totalAddmissionFees = addmissionFees * Number(config.total_semester);
+  const totalAddmissionFees = addmission_fees * Number(config.total_semester);
   // Calculate total tuition fees
-  const totalTuitionFees = (creditCost - creditCost * (waiver / 100)) * credits;
+  const totalTuitionFees =
+    (credit_cost - credit_cost * (waiver / 100)) * total_credits;
   // Calculate total cost in 4 years
   payload.totalCost = totalAddmissionFees + totalTuitionFees;
 
@@ -193,13 +196,21 @@ const createFacultyIntoDB = async (
   }
 };
 
-const createAdminIntoDB = async (file: any, password: string, payload: TAdmin) => {
+const createAdminIntoDB = async (
+  file: any,
+  password: string,
+  payload: TAdmin,
+) => {
   // Check the admin is assign in this department
-  const isExistsAdmin = await Admin.findOne({menegingDepartment: payload?.menegingDepartment});
-  if(isExistsAdmin){
-    throw new AppError(httpStatus.BAD_REQUEST, 'This department already have an admin')
+  const isExistsAdmin = await Admin.findOne({
+    menegingDepartment: payload?.menegingDepartment,
+  });
+  if (isExistsAdmin) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      'This department already have an admin',
+    );
   }
-
 
   // set all user data
   // Create user
@@ -217,7 +228,6 @@ const createAdminIntoDB = async (file: any, password: string, payload: TAdmin) =
   userData.password = password || config.admin_default_pass;
   // Set user role
   userData.role = 'admin';
-
 
   // Start transection rollback
   const session = await startSession();
@@ -251,8 +261,11 @@ const createAdminIntoDB = async (file: any, password: string, payload: TAdmin) =
   }
 };
 
-const createRegistrarIntoDB = async (file: any, password: string, payload: TAdmin) => {
-
+const createRegistrarIntoDB = async (
+  file: any,
+  password: string,
+  payload: TAdmin,
+) => {
   // set all user data
   // Create user
 
@@ -268,7 +281,6 @@ const createRegistrarIntoDB = async (file: any, password: string, payload: TAdmi
   userData.password = password || config.registrar_default_pass;
   // Set user role
   userData.role = 'registrar';
-
 
   // Start transection rollback
   const session = await startSession();
@@ -306,5 +318,5 @@ export const UserServices = {
   createStudentIntoDB,
   createFacultyIntoDB,
   createAdminIntoDB,
-  createRegistrarIntoDB
+  createRegistrarIntoDB,
 };
