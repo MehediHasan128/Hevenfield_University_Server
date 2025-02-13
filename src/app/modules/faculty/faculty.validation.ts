@@ -1,5 +1,7 @@
 import { z } from 'zod';
 import { userNameValidationSchema } from '../user/user.validation';
+import { addressValidationSchema } from '../../constant';
+import { FacultyDesignation } from './faculty.constant';
 
 const educationalBackgroundValidationSchema = z.array(
   z.object({
@@ -77,10 +79,11 @@ const createFacultyValidationSchema = z.object({
           invalid_type_error: 'Invalid blood group.',
         })
         .optional(),
+      designation: z.enum([...FacultyDesignation] as [string, ...string[]]),
 
       // Address Info
-      presentAddress: z.string().min(1, 'Present address is required.'),
-      permanentAddress: z.string().min(1, 'Permanent address is required.'),
+      presentAddress: addressValidationSchema,
+      permanentAddress: addressValidationSchema,
 
       // Educational Background
       educationalBackground: educationalBackgroundValidationSchema,
@@ -102,12 +105,10 @@ const createFacultyValidationSchema = z.object({
 
       // Reference
       reference: referenceValidationSchema,
-      academicDepartment: z.string()
+      academicDepartment: z.string(),
     }),
   }),
 });
-
-
 
 const updateFacultyValidationSchema = z.object({
   body: z.object({
@@ -117,27 +118,45 @@ const updateFacultyValidationSchema = z.object({
       email: z
         .string()
         .min(1, 'Email is required.')
-        .email('Invalid email format.').optional(),
-      gender: z.enum(['male', 'female'], {
-        errorMap: () => ({ message: 'Gender must be either male or female.' }),
-      }).optional(),
+        .email('Invalid email format.')
+        .optional(),
+      gender: z
+        .enum(['male', 'female'], {
+          errorMap: () => ({
+            message: 'Gender must be either male or female.',
+          }),
+        })
+        .optional(),
       dateOfBirth: z
         .string({
           required_error: 'Date of birth is required.',
         })
         .refine((value) => !isNaN(Date.parse(value)), {
           message: 'Invalid date format.',
-        }).optional(),
-      contactNumber: z.string().min(1, 'Contact number is required.').optional(),
+        })
+        .optional(),
+      contactNumber: z
+        .string()
+        .min(1, 'Contact number is required.')
+        .optional(),
       bloodGroup: z
         .enum(['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'], {
           invalid_type_error: 'Invalid blood group.',
         })
         .optional(),
+      designation: z
+        .enum([...FacultyDesignation] as [string, ...string[]])
+        .optional(),
 
       // Address Info
-      presentAddress: z.string().min(1, 'Present address is required.').optional(),
-      permanentAddress: z.string().min(1, 'Permanent address is required.').optional(),
+      presentAddress: z
+        .string()
+        .min(1, 'Present address is required.')
+        .optional(),
+      permanentAddress: z
+        .string()
+        .min(1, 'Permanent address is required.')
+        .optional(),
 
       // Educational Background
       educationalBackground: educationalBackgroundValidationSchema.optional(),
@@ -158,12 +177,12 @@ const updateFacultyValidationSchema = z.object({
       awardsAndAchievements: z.array(z.string()).optional(),
 
       // Reference
-      reference: referenceValidationSchema.optional()
+      reference: referenceValidationSchema.optional(),
     }),
   }),
 });
 
 export const FacultyValidation = {
   createFacultyValidationSchema,
-  updateFacultyValidationSchema
+  updateFacultyValidationSchema,
 };

@@ -1,5 +1,7 @@
 import { Types } from 'mongoose';
 import { TUserName } from '../user/user.constant';
+import { TAddress } from '../../constant';
+import { TFacultyDesignation } from './faculty.constant';
 
 export type TEducationalBackground = {
   degree: string;
@@ -47,10 +49,11 @@ export type TFaculty = {
   dateOfBirth: Date;
   contactNumber: string;
   bloodGroup?: 'A+' | 'A-' | 'B+' | 'B-' | 'O+' | 'O-' | 'AB+' | 'AB-';
+  designation: TFacultyDesignation;
 
   // Address Info
-  presentAddress: string;
-  permanentAddress: string;
+  presentAddress: TAddress;
+  permanentAddress: TAddress;
 
   // Educational Background
   educationalBackground: TEducationalBackground;

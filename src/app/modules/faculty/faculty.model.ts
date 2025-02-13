@@ -8,10 +8,11 @@ import {
   TSampleWorkPortfolio,
 } from './faculty.interface';
 import { TUserName } from '../user/user.constant';
+import { addressSchema } from '../../constant';
+import { FacultyDesignation } from './faculty.constant';
 
 const userNameSchema = new Schema<TUserName>({
   firstName: { type: String, required: [true, 'First name is required.'] },
-  middleName: { type: String },
   lastName: { type: String, required: [true, 'Last name is required.'] },
 });
 
@@ -66,78 +67,83 @@ const referenceSchema = new Schema<TReference>({
   email: { type: String, required: [true, 'Email is required'] },
 });
 
-const facultSchema = new Schema<TFaculty>({
-  id: { type: String, required: [true, 'ID is required'] },
-  userId: {
-    type: Schema.Types.ObjectId,
-    required: [true, 'User ID is required'],
+const facultSchema = new Schema<TFaculty>(
+  {
+    id: { type: String, required: [true, 'ID is required'] },
+    userId: {
+      type: Schema.Types.ObjectId,
+      required: [true, 'User ID is required'],
+    },
+
+    // Personal Information
+    imageURL: { type: String },
+    userName: userNameSchema,
+    email: { type: String, required: [true, 'Email is required'] },
+    gender: {
+      type: String,
+      enum: ['male', 'female'],
+      required: [true, 'Gender is required'],
+    },
+    dateOfBirth: { type: Date, required: [true, 'Date of birth is required.'] },
+    contactNumber: {
+      type: String,
+      required: [true, 'Contact number is required'],
+    },
+    bloodGroup: {
+      type: String,
+      enum: ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'],
+      message: 'Invalid blood group.',
+    },
+    designation: {
+      type: String,
+      enum: FacultyDesignation,
+      required: [true, 'Faculty designation is required']
+    },
+
+    // Address Info
+    presentAddress: {
+      type: addressSchema,
+    },
+    permanentAddress: {
+      type: addressSchema,
+    },
+
+    // Educational Background
+    educationalBackground: {
+      type: [educationalBackgroundSchema],
+      required: [true, 'Educational background is required'],
+    },
+
+    // Professional Experience
+    professionalExperience: { type: [professionalExperienceSchema] },
+
+    // Skills and Certifications
+    skillsAndCertifications: { type: [String] },
+
+    // Sample Work Portfolio
+    sampleWorkPortfolio: { type: [sampleWorkPortfolioSchema] },
+
+    // Recommendation Letters
+    recommendationLetters: { type: [recommendationLetterSchema] },
+
+    // Awards and Achievements
+    awardsAndAchievements: { type: [String] },
+
+    // Reference
+    reference: {
+      type: referenceSchema,
+      required: [true, 'Reference is required'],
+    },
+    academicDepartment: {
+      type: Schema.Types.ObjectId,
+      required: [true, 'Academic department is required'],
+      ref: 'AcademicDepartment',
+    },
+    isDeleted: { type: Boolean, default: false },
   },
-
-  // Personal Information
-  imageURL: { type: String },
-  userName: userNameSchema,
-  email: { type: String, required: [true, 'Email is required'] },
-  gender: {
-    type: String,
-    enum: ['male', 'female'],
-    required: [true, 'Gender is required'],
+  {
+    timestamps: true,
   },
-  dateOfBirth: { type: Date, required: [true, 'Date of birth is required.'] },
-  contactNumber: {
-    type: String,
-    required: [true, 'Contact number is required'],
-  },
-  bloodGroup: {
-    type: String,
-    enum: ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'],
-    message: 'Invalid blood group.',
-  },
-
-  // Address Info
-  presentAddress: {
-    type: String,
-    required: [true, 'Present address is required'],
-  },
-  permanentAddress: {
-    type: String,
-    required: [true, 'Permanent address is required'],
-  },
-
-  // Educational Background
-  educationalBackground: {
-    type: [educationalBackgroundSchema],
-    required: [true, 'Educational background is required'],
-  },
-
-  // Professional Experience
-  professionalExperience: { type: [professionalExperienceSchema] },
-
-  // Skills and Certifications
-  skillsAndCertifications: { type: [String] },
-
-  // Sample Work Portfolio
-  sampleWorkPortfolio: { type: [sampleWorkPortfolioSchema] },
-
-  // Recommendation Letters
-  recommendationLetters: { type: [recommendationLetterSchema] },
-
-  // Awards and Achievements
-  awardsAndAchievements: { type: [String] },
-
-  // Reference
-  reference: {
-    type: referenceSchema,
-    required: [true, 'Reference is required'],
-  },
-  academicDepartment: {
-    type: Schema.Types.ObjectId,
-    required: [true, 'Academic department is required'],
-    ref: 'AcademicDepartment'
-  },
-  isDeleted: { type: Boolean, default: false },
-}, {
-  timestamps: true
-});
-
+);
 
 export const Faculty = model<TFaculty>('faculties', facultSchema);
