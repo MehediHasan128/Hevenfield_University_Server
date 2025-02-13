@@ -13,7 +13,9 @@ export const userNameSchema = new Schema<TUserName>({
   });
 
 export const userRole = {
-    student: 'student',
+    superAdmin: 'super-admin',
+    registrar: 'registrar',
+    admin: 'admin',
     faculty: 'faculty',
-    admin: 'admin'
+    student: 'student',
 } as const;

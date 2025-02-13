@@ -25,7 +25,6 @@ router.post(
 // Create faculty
 router.post(
   '/create-faculty',
-  Auth(userRole.admin),
   upload.single('file'),
   (req: Request, res: Response, next: NextFunction) => {
     req.body = JSON.parse(req.body.data);

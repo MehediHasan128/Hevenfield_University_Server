@@ -21,12 +21,21 @@ import { getDepartmentCostInformation } from '../../utils/getDepartmentCostInfor
 import { Faculty } from '../faculty/faculty.model';
 import { TAdmin } from '../admin/admin.interface';
 import { Admin } from '../admin/admin.model';
+import { AcademicSemester } from '../academicSemester/academicSemester.model';
 
 const createStudentIntoDB = async (
   file: any,
   password: string,
   payload: TStudent,
 ) => {
+
+
+  const academicsemester = await AcademicSemester.findById(payload.addmissionSemester, {_id: 0, addmissionStatus: 1});
+  if(academicsemester!.addmissionStatus === 'close'){
+    throw new AppError(httpStatus.BAD_REQUEST, "We're sorry, the admissions for this semester are now closed.")
+  }
+
+
   // Set all user data
 
   // Create a user object

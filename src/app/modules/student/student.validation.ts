@@ -71,15 +71,6 @@ const createStudentValidationSchema = z.object({
       academicDepartment: z.string({
         required_error: 'Academic department is required.',
       }),
-      addmissionFee: z.number({
-        required_error: 'Admission fee is required.',
-      }),
-      totalCredits: z.number({
-        required_error: 'Total credits are required.',
-      }),
-      totalCost: z.number({
-        required_error: 'Total cost is required.',
-      }),
       isDeleted: z.boolean().optional(),
     }),
   }),

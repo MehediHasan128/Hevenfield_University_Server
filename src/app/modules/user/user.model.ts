@@ -40,7 +40,7 @@ const userSchema = new Schema<TUser>({
     type: String,
     required: [true, 'Role is required.'],
     enum: {
-      values: ['admin', 'faculty', 'student'],
+      values: ['super-admin', 'registrar', 'admin', 'faculty', 'student'],
       message: 'Role must be either admin, faculty, or student.',
     },
   },

@@ -10,7 +10,6 @@ const router = express.Router();
 // Create academic faculty
 router.post(
   '/create-academic-semester',
-  Auth(userRole.admin),
   valiDationRequest(
     AcademicSemesterValidation.createAcademicSemesterValidationSchema,
   ),
@@ -19,7 +18,6 @@ router.post(
 // Get all academic faculty
 router.get(
   '/',
-  Auth(userRole.admin),
   AcademicSemesterController.getAllAcademicSemester,
 );
 

@@ -22,5 +22,6 @@ export default {
   reset_password_ui_link: process.env.RESET_PASSWORD_UI_LINK,
   smtp_secreat_credential: process.env.SMTP_SECRET_CREDENTIAL,
   jwt_access_secret_token: process.env.JWT_ACCESS_SECRET_TOKEN,
+  super_admin_default_pass: process.env.SUPER_ADMIN_DEFAULT_PASS,
   jwt_refresh_secret_token: process.env.JWT_REFRESH_SECRET_TOKEN,
 };
