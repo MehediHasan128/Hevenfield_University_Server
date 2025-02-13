@@ -11,6 +11,9 @@ const createAcdemicDepartmentValidationSchema = z.object({
         'Department code must be alphanumeric with no spaces.',
       )
       .nonempty('Department code is required.'),
+      addmission_fees: z.number({required_error: 'Addmission fees is required'}),
+      total_credits: z.number({required_error: 'Total creadits is required'}),
+      credit_cost: z.number({required_error: 'Credit cost is required'}),
   }),
 });
 

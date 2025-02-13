@@ -10,6 +10,7 @@ const router = express.Router();
 // Create academic faculty
 router.post(
   '/create-academic-school',
+  Auth(userRole.superAdmin),
   valiDationRequest(
     AcademicSchoolValidation.createAcademicSchoolValidationSchema,
   ),

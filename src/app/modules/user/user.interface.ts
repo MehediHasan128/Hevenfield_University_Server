@@ -12,4 +12,4 @@ export type TUser = {
     isDeleted: boolean;
 };
 
-export type TUserRole = keyof typeof userRole;
+export type TUserRole = (typeof userRole)[keyof typeof userRole];
