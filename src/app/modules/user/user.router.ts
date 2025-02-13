@@ -7,6 +7,7 @@ import { FacultyValidation } from '../faculty/faculty.validation';
 import { AdminValidation } from '../admin/admin.validation';
 import Auth from '../../middlwares/auth';
 import { userRole } from './user.constant';
+import { RegistrarValidation } from '../registrar/registrar.validation';
 
 const router = express.Router();
 
@@ -45,6 +46,19 @@ router.post(
   },
   valiDationRequest(AdminValidation.createAdminValidationSchema),
   UserController.createAdmin,
+);
+
+// Create registrar
+router.post(
+  '/create-registrar',
+  Auth(userRole.superAdmin),
+  upload.single('file'),
+  (req: Request, res: Response, next: NextFunction) => {
+    req.body = JSON.parse(req.body.data);
+    next();
+  },
+  valiDationRequest(RegistrarValidation.createRegistrarValidationSchema),
+  UserController.createRegistrar,
 );
 
 export const UserRoutes = router;

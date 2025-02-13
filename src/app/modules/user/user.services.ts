@@ -22,6 +22,7 @@ import { Faculty } from '../faculty/faculty.model';
 import { TAdmin } from '../admin/admin.interface';
 import { Admin } from '../admin/admin.model';
 import { AcademicSemester } from '../academicSemester/academicSemester.model';
+import { Registrar } from '../registrar/registrar.model';
 
 const createStudentIntoDB = async (
   file: any,
@@ -250,8 +251,60 @@ const createAdminIntoDB = async (file: any, password: string, payload: TAdmin) =
   }
 };
 
+const createRegistrarIntoDB = async (file: any, password: string, payload: TAdmin) => {
+
+  // set all user data
+  // Create user
+
+  const userData: Partial<TUser> = {};
+
+  // Set user id
+  userData.id = 'REG-001';
+  // Set user email
+  userData.email = payload?.email;
+  // Set user name
+  userData.userName = payload?.userName;
+  // Set user password
+  userData.password = password || config.registrar_default_pass;
+  // Set user role
+  userData.role = 'registrar';
+
+
+  // Start transection rollback
+  const session = await startSession();
+
+  try {
+    session.startTransaction();
+
+    // Upload image to cloudinary
+    const imageName = `${userData.id}-${payload?.userName?.lastName}`;
+    const imagePath = file?.path;
+    const uploadImage = await sendImageToCloudinary(imagePath, imageName);
+    payload.imageURL = uploadImage?.secure_url;
+
+    // Create user into db
+    const newUser = await User.create([userData], { session });
+
+    // Set userId or employ id in admin collection
+    payload.id = newUser[0]?.id;
+    payload.userId = newUser[0]?._id;
+
+    // Now create admin into db
+    const newRegistrar = await Registrar.create([payload], { session });
+
+    await session.commitTransaction();
+    await session.endSession();
+    return newRegistrar;
+  } catch (error) {
+    await session.abortTransaction();
+    await session.endSession();
+    console.log(error);
+  }
+};
+
 export const UserServices = {
   createStudentIntoDB,
   createFacultyIntoDB,
   createAdminIntoDB,
+  createRegistrarIntoDB
 };

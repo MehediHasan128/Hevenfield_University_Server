@@ -13,6 +13,7 @@ export default {
   bcrypt_salt_round: process.env.BCRYPT_SALT_ROUND,
   clodinary_api_key: process.env.CLOUDINARY_APY_KEY,
   admin_default_pass: process.env.ADMIN_DEFAULT_PASS,
+  registrar_default_pass: process.env.REGISTRAR_DEFAULT_PASS,
   faculty_default_pass: process.env.FACULTY_DEFAULT_PASS,
   student_default_pass: process.env.STUDENT_DEFAULT_PASS,
   clodinary_cloud_name: process.env.CLOUDINARY_CLOUD_NAME,

@@ -4,7 +4,7 @@ import { addressValidationSchema } from '../../constant';
 
 const createRegistrarValidationSchema = z.object({
   body: z.object({
-    admin: z.object({
+    registrar: z.object({
       // Personal Information
       userName: userNameValidationSchema,
       email: z
