@@ -11,6 +11,6 @@ const router = express.Router();
 router.post('/create-academic-department', Auth(userRole.superAdmin), valiDationRequest(AcademicDepartmentValidation.createAcdemicDepartmentValidationSchema), AcademicDepartmentController.createAcademicDepartment);
 
 // Create academic department
-router.get('/', AcademicDepartmentController.getAllAcademicDepartment);
+router.get('/', Auth(userRole.superAdmin, userRole.registrar, userRole.admin), AcademicDepartmentController.getAllAcademicDepartment);
 
 export const AcademicDepartmentRoutes = router;

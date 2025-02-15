@@ -14,6 +14,19 @@ const getAllRegistrar = catchAsync(async(req, res) => {
     });
 });
 
+const getSingleRegistrar = catchAsync(async(req, res) => {
+
+    const data = await RegistrarServices.getSingleRegistrarFromDB(req.params.registrarId);
+
+    sendResponce(res, {
+        success: true,
+        statusCode: 200,
+        message: 'Get registrar successfully',
+        data: data
+    });
+});
+
 export const RegistrarController = {
     getAllRegistrar,
+    getSingleRegistrar
 }

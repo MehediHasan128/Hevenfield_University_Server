@@ -99,6 +99,7 @@ const facultSchema = new Schema<TFaculty>(
       enum: FacultyDesignation,
       required: [true, 'Faculty designation is required']
     },
+    joiningDate: { type: Date, required: [true, 'Joining date is required.'] },
 
     // Address Info
     presentAddress: {

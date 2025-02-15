@@ -1,5 +1,6 @@
 import { Types } from "mongoose";
 import { TUserName } from "../user/user.constant";
+import { TAddress } from "../../constant";
 
 
 export type TGuardian = {
@@ -33,8 +34,8 @@ export type TStudent = {
     bloodGroup?: 'A+' | 'A-' | 'B+' | 'B-' | 'O+' | 'O-' | 'AB+' | 'AB-';
 
     // Address Info
-    presentAddress: string;
-    permanentAddress: string;
+    presentAddress: TAddress;
+    permanentAddress: TAddress;
 
     // Guardian info
     guardian: TGuardian;

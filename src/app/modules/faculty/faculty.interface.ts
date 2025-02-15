@@ -50,6 +50,7 @@ export type TFaculty = {
   contactNumber: string;
   bloodGroup?: 'A+' | 'A-' | 'B+' | 'B-' | 'O+' | 'O-' | 'AB+' | 'AB-';
   designation: TFacultyDesignation;
+  joiningDate: Date;
 
   // Address Info
   presentAddress: TAddress;

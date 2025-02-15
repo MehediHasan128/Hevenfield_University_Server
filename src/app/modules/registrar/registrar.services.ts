@@ -12,6 +12,12 @@ const getAllRegistrarFromDB = async (query: Record<string, unknown>) => {
   return data;
 };
 
+const getSingleRegistrarFromDB = async (registrarId: string) => {
+  const data = await Registrar.findOne({id: registrarId});
+  return data;
+};
+
 export const RegistrarServices = {
-  getAllRegistrarFromDB
+  getAllRegistrarFromDB,
+  getSingleRegistrarFromDB
 };

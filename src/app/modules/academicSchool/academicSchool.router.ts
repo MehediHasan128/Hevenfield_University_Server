@@ -21,6 +21,7 @@ router.post(
 // Create academic faculty
 router.get(
   '/',
+  Auth(userRole.superAdmin, userRole.registrar),
   AcademicSchoolController.getAllAcademicSchool
 );
 

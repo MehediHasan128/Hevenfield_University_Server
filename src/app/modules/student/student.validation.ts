@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { userNameValidationSchema } from '../user/user.validation';
+import { addressValidationSchema } from '../../constant';
 
 const guardianValidationSchema = z.object({
   fatherName: z.string().optional(),
@@ -45,12 +46,8 @@ const createStudentValidationSchema = z.object({
           invalid_type_error: 'Invalid blood group.',
         })
         .optional(),
-      presentAddress: z.string({
-        required_error: 'Present address is required.',
-      }),
-      permanentAddress: z.string({
-        required_error: 'Permanent address is required.',
-      }),
+      presentAddress: addressValidationSchema,
+      permanentAddress: addressValidationSchema,
       guardian: guardianValidationSchema,
       localGuardian: localGuardianValidationSchema,
       sscRoll: z.string({

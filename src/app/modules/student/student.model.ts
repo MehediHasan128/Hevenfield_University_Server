@@ -1,6 +1,7 @@
 import { model, Schema } from 'mongoose';
 import { userNameSchema } from '../user/user.constant';
 import { TGuardian, TLocalGuardian, TStudent } from './student.interface';
+import { addressSchema } from '../../constant';
 
 const guardianSchema = new Schema<TGuardian>({
   // Personal information
@@ -59,12 +60,10 @@ const studentSchema = new Schema<TStudent>({
 
   // Address Info
   presentAddress: {
-    type: String,
-    required: [true, 'Present address is required.'],
+    type: addressSchema,
   },
   permanentAddress: {
-    type: String,
-    required: [true, 'Permanent address is required.'],
+    type: addressSchema,
   },
 
   // Guardian info

@@ -80,6 +80,13 @@ const createFacultyValidationSchema = z.object({
         })
         .optional(),
       designation: z.enum([...FacultyDesignation] as [string, ...string[]]),
+      joiningDate: z
+        .string({
+          required_error: 'Joining date is required.',
+        })
+        .refine((value) => !isNaN(Date.parse(value)), {
+          message: 'Invalid date format.',
+        }),
 
       // Address Info
       presentAddress: addressValidationSchema,

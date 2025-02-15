@@ -14,6 +14,7 @@ const router = express.Router();
 // Create student
 router.post(
   '/create-student',
+  Auth(userRole.registrar),
   upload.single('file'),
   (req: Request, res: Response, next: NextFunction) => {
     req.body = JSON.parse(req.body.data);
@@ -26,6 +27,7 @@ router.post(
 // Create faculty
 router.post(
   '/create-faculty',
+  Auth(userRole.registrar),
   upload.single('file'),
   (req: Request, res: Response, next: NextFunction) => {
     req.body = JSON.parse(req.body.data);
